@@ -23,10 +23,12 @@ class HistoryPayment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      padding: const EdgeInsets.fromLTRB(16, 10, 6, 10),
+      height: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 15, left: 8, right: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9),
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: shadowColor2.withOpacity(0.29),
@@ -64,6 +66,7 @@ class HistoryPayment extends StatelessWidget {
                 width: 8,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,

@@ -1,20 +1,13 @@
-import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/app_bar_content.dart';
 import 'package:cash_collector/composants/card_photo_pick.dart';
 import 'package:cash_collector/composants/block_button.dart';
 import 'package:cash_collector/composants/block_select.dart';
 import 'package:cash_collector/composants/circular_button.dart';
-import 'package:cash_collector/composants/switch_activity_state.dart';
-import 'package:cash_collector/helpers/colors.dart';
-import 'package:cash_collector/pages/chat.dart';
-import 'package:cash_collector/pages/dashboard.dart';
-import 'package:cash_collector/pages/donut.dart';
 import 'package:cash_collector/pages/encaissement.dart';
 import 'package:cash_collector/pages/home.dart';
 import 'package:cash_collector/pages/mon_compte.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:im_stepper/stepper.dart';
 
 class CreationClient extends StatefulWidget {
@@ -27,7 +20,7 @@ class CreationClient extends StatefulWidget {
 class CreationClientState extends State<CreationClient> {
   bool workStatus = true;
   int activeStep = 0;
-  int upperBound = 5;
+  int upperBound = 4;
   String nbreDePassage = "1";
 
   @override
@@ -69,7 +62,7 @@ class CreationClientState extends State<CreationClient> {
                 lineColor: const Color(0xFFBCE0FD),
                 numberStyle: const TextStyle(color: Colors.white),
                 enableNextPreviousButtons: false,
-                numbers: const [1,2,3,4,5,6],
+                numbers: const [1,2,3,4,5,],
 
                 // activeStep property set to activeStep variable defined above.
                 activeStep: activeStep,
@@ -87,8 +80,8 @@ class CreationClientState extends State<CreationClient> {
               const SizedBox(height: 20,),
               content(),
               const SizedBox(height: 40,),
-              (activeStep < 5)?const Divider():const SizedBox(),
-              (activeStep < 5)?Row(
+              (activeStep < 4)?const Divider():const SizedBox(),
+              (activeStep < 4)?Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
@@ -129,7 +122,7 @@ class CreationClientState extends State<CreationClient> {
   }
 
   Widget header() {
-    return (activeStep < 5)?Padding(
+    return (activeStep < 4)?Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Text(
         headerText(),
@@ -147,7 +140,7 @@ class CreationClientState extends State<CreationClient> {
       case 0:
         return 'Infos basiques';
       case 1:
-        return 'Titre 2';
+        return 'Personne à contacter';
 
       case 2:
         return 'Photos';
@@ -156,9 +149,6 @@ class CreationClientState extends State<CreationClient> {
         return 'Fréquence de visite';
 
       case 4:
-        return 'Titre 5';
-
-      case 5:
         return '';
 
       default:
@@ -172,7 +162,7 @@ class CreationClientState extends State<CreationClient> {
         return formInfoBasique();
 
       case 1:
-        return Container();
+        return formPersonneAContacter();
 
       case 2:
         return formPhotos();
@@ -181,9 +171,6 @@ class CreationClientState extends State<CreationClient> {
         return formFrequenceVisite();
 
       case 4:
-        return Container();
-
-      case 5:
         return formEnd();
 
       default:
@@ -295,6 +282,56 @@ class CreationClientState extends State<CreationClient> {
     );
   }
 
+  Widget formPersonneAContacter() {
+    return Form(
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                label: Text('Noms', style: TextStyle(fontSize: 14, color: Colors.black),),
+              ),
+              onSaved: (String? value) {
+                if (value!=null) {
+                }
+              },
+              validator: (String? value) {
+                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+              },
+            ),
+            const SizedBox(height: 20,),
+            TextFormField(
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                label: Text('Prénoms', style: TextStyle(fontSize: 14, color: Colors.black),),
+              ),
+              onSaved: (String? value) {
+                if (value!=null) {
+                }
+              },
+              validator: (String? value) {
+                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+              },
+            ),
+            const SizedBox(height: 20,),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                label: Text('Téléphone', style: TextStyle(fontSize: 14, color: Colors.black),),
+              ),
+              onSaved: (String? value) {
+                if (value!=null) {
+                }
+              },
+              validator: (String? value) {
+                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+              },
+            ),
+          ],
+        )
+    );
+  }
+
   Widget formPhotos() {
     return Form(
         child: Column(
@@ -314,7 +351,11 @@ class CreationClientState extends State<CreationClient> {
               },
             ),
             const SizedBox(height: 30,),
-            const Text('Photos de la CNI', style: TextStyle(fontSize: 14, color: Colors.black),),
+            const Text('Photos de la CNI (recto)', style: TextStyle(fontSize: 14, color: Colors.black),),
+            const SizedBox(height: 20,),
+            CardPhotoPick(width: MediaQuery.of(context).size.width - 40,),
+            const SizedBox(height: 30,),
+            const Text('Photos de la CNI (verso)', style: TextStyle(fontSize: 14, color: Colors.black),),
             const SizedBox(height: 20,),
             CardPhotoPick(width: MediaQuery.of(context).size.width - 40,),
             const SizedBox(height: 30,),
@@ -397,7 +438,7 @@ class CreationClientState extends State<CreationClient> {
         ),
         const SizedBox(height: 30,),
         const Text("Nombre de passage", style: TextStyle(color: textColorGrey,fontSize: 15, fontWeight: FontWeight.bold),),
-        const SizedBox(height: 20,),
+        const SizedBox(height: 30,),
         Container(
           height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -430,7 +471,7 @@ class CreationClientState extends State<CreationClient> {
             }).toList(),
           ),
         ),
-        const SizedBox(height: 30,),
+        const SizedBox(height: 45,),
         const Text("Heure de passage", style: TextStyle(color: textColorGrey,fontSize: 15, fontWeight: FontWeight.bold),),
         const SizedBox(height: 20,),
         Container(

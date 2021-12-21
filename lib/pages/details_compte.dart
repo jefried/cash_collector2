@@ -15,6 +15,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:cash_collector/pages/encaissement.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 enum Onglet {
@@ -117,6 +118,14 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
     super.dispose();
   }
 
+  void customLaunch(command) async {
+    if(await canLaunch(command)) {
+      await launch(command);
+    } else {
+      print(' could not launch $command');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -193,10 +202,13 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
                     ),
                     const SizedBox(width: 16,),
                     InkWell(
-                      onTap: (){
-                        setState(() {
+                      onTap: () async{
+                        /*setState(() {
                           onglet = Onglet.appels;
-                        });
+                        });*/
+                        //await FlutterPhoneDirectCaller.callNumber(number);
+                        //launch('tel://+237652692742');
+                        customLaunch('tel:+237652692742');
                       },
                       child: CircularButton(icon: Icons.phone, foregroundColor: (onglet == Onglet.appels)?const Color(0xFF075BD5):const Color(0xFF707070), colorShadow: (onglet == Onglet.appels)?const Color(0xFF075BD5):const Color(0xFFBEBEBE),),
                     )
@@ -395,7 +407,7 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
   Widget _historique() {
     return Container(
         width: double.infinity,
-        color: Colors.white,
+        color: Color(0xFFF3F3FF),
         margin: const EdgeInsets.symmetric(horizontal: 24),
         child: ListView(
           shrinkWrap: false,

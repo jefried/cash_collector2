@@ -331,7 +331,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
           SizedBox(height: 30,),
           Padding(
             padding: EdgeInsets.only(left: 20),
-            child: Text("Collecte récentes", style: TextStyle(fontSize: 20),),
+            child: Text("Collectes récentes", style: TextStyle(fontSize: 20),),
           ),
           SizedBox(height: 20,),
           Container(

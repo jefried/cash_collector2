@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/switch_activity_state.dart';
 import 'package:cash_collector/helpers/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:cash_collector/pages/notifications.dart' as notif;
 
 class AppBarContentWithBack extends StatefulWidget {
   final String title;
@@ -48,7 +49,9 @@ class AppBarContentWithBackState extends State<AppBarContentWithBack> {
         const SwitchActivity(),
         Badge(
           child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const notif.Notification()));
+              },
               icon: const Icon(
                 Icons.notifications_outlined,
                 color: infosColor1,

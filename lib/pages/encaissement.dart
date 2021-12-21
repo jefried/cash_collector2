@@ -246,6 +246,7 @@ class EncaissementState extends State<Encaissement> {
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent, width: 5.0),
                 ),
+                contentPadding: EdgeInsets.fromLTRB(13, 0, 13, 15),
               ),
             ),
           ),
