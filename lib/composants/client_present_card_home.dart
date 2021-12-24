@@ -110,7 +110,7 @@ class ClientPresentCardHome extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14)
                 ),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement(noms: name)));
                 },
                 child: const Text(
                   'Encaisser',

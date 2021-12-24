@@ -1,15 +1,9 @@
 import 'dart:ui';
-
-import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/app_bar_content.dart';
 import 'package:cash_collector/composants/block_button.dart';
 import 'package:cash_collector/composants/history_payment.dart';
-import 'package:cash_collector/composants/switch_activity_state.dart';
-import 'package:cash_collector/helpers/colors.dart';
-import 'package:cash_collector/pages/creation_client.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 class MonCompte extends StatefulWidget {
   MonCompteState createState() => MonCompteState();
@@ -19,6 +13,16 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
   late TabController tabController;
   int currentIndex = 0;
   bool workStatus = true;
+  int solde = 540000;
+  String date = "Le 13 Dec. 2021";
+  String code = "PRO CENTER RC";
+  String noms = "Doe";
+  String prenoms = "John";
+  String sexe = "maxculin";
+  String cni = "000 000 000 000";
+  String telephone = "+237 650 000 000";
+  String langue = "Français";
+  String mdp = "123456";
 
   List payments = [
     {
@@ -172,9 +176,9 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
                                 children: [
                                   Text("Votre solde", style: TextStyle(color: Colors.white, fontSize: 12),),
                                   SizedBox(height: 3,),
-                                  Text("XAF " + "540 000", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                                  Text("XAF " + solde.toString(), style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
                                   SizedBox(height: 3,),
-                                  Text("Le 13 Dec. 2021", style: TextStyle(color: Colors.white, fontSize: 12),),
+                                  Text(date, style: TextStyle(color: Colors.white, fontSize: 12),),
                                 ],
                               )
                             )
@@ -184,7 +188,7 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
                             right: 20,
                             child: Container(
                               color: Colors.black.withOpacity(0.6),
-                              child: const Text("PRO CENTER RC", style: TextStyle(color: Colors.white, fontSize: 17),),
+                              child: Text(code, style: TextStyle(color: Colors.white, fontSize: 17),),
                             )
                         )
                       ],
@@ -256,17 +260,17 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _listTileProfil("Noms", "Doe", Icons.lock, textColorGrey),
+              _listTileProfil("Noms", noms, Icons.lock, textColorGrey),
               const Divider(),
-              _listTileProfil("Prénoms", "John", Icons.lock, textColorGrey),
+              _listTileProfil("Prénoms", prenoms, Icons.lock, textColorGrey),
               const Divider(),
-              _listTileProfil("Sexe", "Masculin", Icons.lock, textColorGrey),
+              _listTileProfil("Sexe", sexe, Icons.lock, textColorGrey),
               const Divider(),
-              _listTileProfil("CNI", "000 000 000 000", Icons.lock, textColorGrey),
+              _listTileProfil("CNI", cni, Icons.lock, textColorGrey),
               const Divider(),
-              _listTileProfil("Numéro de téléphone", "+237 650 000 000",Icons.lock, textColorGrey),
+              _listTileProfil("Numéro de téléphone", telephone,Icons.lock, textColorGrey),
               const Divider(),
-              _listTileProfil("Langue", "Français",Icons.create_sharp, primaryColorAccent),
+              _listTileProfil("Langue", langue,Icons.create_sharp, primaryColorAccent),
             ],
           ),
         ),
@@ -291,7 +295,7 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
                 )
               ]
           ),
-          child: _listTileProfil("Mot de passe", "123456", Icons.lock, textColorGrey),
+          child: _listTileProfil("Mot de passe", mdp, Icons.lock, textColorGrey),
         ),
         const SizedBox(height: 20,)
       ],

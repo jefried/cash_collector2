@@ -176,7 +176,7 @@ class MapDisplayer {
           children: [
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailCompte()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailCompte(noms: "Ondua Jacqueline", localisation: name,)));
               },
               child: SpeechBalloon(
                 nipHeight: 15,

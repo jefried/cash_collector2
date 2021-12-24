@@ -9,6 +9,7 @@ import 'package:cash_collector/pages/mon_compte.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreationClient extends StatefulWidget {
   const CreationClient({Key? key}) : super(key: key);
@@ -18,10 +19,48 @@ class CreationClient extends StatefulWidget {
 }
 
 class CreationClientState extends State<CreationClient> {
+  final snackBar = SnackBar(content: Text("veuillez sélectionner des jours et des heures de visite"));
   bool workStatus = true;
   int activeStep = 0;
   int upperBound = 4;
   String nbreDePassage = "1";
+  String noms = "";
+  String prenoms = "";
+  String secteur = "";
+  int telephone = 0;
+  String nomsAContacter = "";
+  String prenomsAContacter = "";
+  int telephoneAContacter = 0;
+  int numeroCNI = 0;
+  XFile? photoCNIRecto;
+  XFile? photoCNIVerso;
+  XFile? photoGerant;
+  XFile? photoLieu;
+  GlobalKey<FormState> infosBasiqueKey = GlobalKey<FormState>();
+  GlobalKey<FormState> personneAContacterKey = GlobalKey<FormState>();
+  GlobalKey<FormState> photosKey = GlobalKey<FormState>();
+  GlobalKey<CardPhotoPickState> photoCNIRectoKey = GlobalKey<CardPhotoPickState>();
+  GlobalKey<CardPhotoPickState> photoCNIVersoKey = GlobalKey<CardPhotoPickState>();
+  GlobalKey<CardPhotoPickState> photoGerantKey = GlobalKey<CardPhotoPickState>();
+  GlobalKey<CardPhotoPickState> photoLieuKey = GlobalKey<CardPhotoPickState>();
+  GlobalKey<BlockSelectedState> lundiKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> mardiKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> mercrediKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> jeudiKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> vendrediKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> samediKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> dimancheKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> huitKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> neufKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> dixKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> onzeKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> douzeKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> treizeKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> quatorzeKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> quinzeKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> seizeKey = GlobalKey<BlockSelectedState>();
+  GlobalKey<BlockSelectedState> dixSeptKey = GlobalKey<BlockSelectedState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,9 +143,67 @@ class CreationClientState extends State<CreationClient> {
                   InkWell(
                     onTap: (){
                       if (activeStep < upperBound) {
-                        setState(() {
-                          activeStep++;
-                        });
+                        switch(activeStep) {
+                          case 0 : {
+                            if(infosBasiqueKey.currentState!.validate()){
+                              print(infosBasiqueKey.currentState!.validate());
+                              infosBasiqueKey.currentState!.save();
+                              setState(() {
+                                activeStep++;
+                              });
+                            } else {
+                              print(infosBasiqueKey.currentState!.validate());
+                            }
+                          } break;
+                          case 1 : {
+                            if(personneAContacterKey.currentState!.validate()) {
+                              personneAContacterKey.currentState!.save();
+                              setState((){
+                                activeStep++;
+                              });
+                            }
+                          } break;
+                          case 2 : {
+                            if(photosKey.currentState!.validate()) {
+                              photosKey.currentState!.save();
+                              setState((){
+                                activeStep++;
+                              });
+                            }
+                          } break;
+                          case 3 : {
+                            //jours
+                            List jours = [];
+                            if(lundiKey.currentState!.check) jours.add("lundi");
+                            if(mardiKey.currentState!.check) jours.add("mardi");
+                            if(mercrediKey.currentState!.check) jours.add("mercredi");
+                            if(jeudiKey.currentState!.check) jours.add("jeudi");
+                            if(vendrediKey.currentState!.check) jours.add("vendredi");
+                            if(samediKey.currentState!.check) jours.add("samedi");
+                            if(dimancheKey.currentState!.check) jours.add("dimanche");
+                            //heures
+                            List heures = [];
+                            if(huitKey.currentState!.check) heures.add(8);
+                            if(neufKey.currentState!.check) heures.add(9);
+                            if(dixKey.currentState!.check) heures.add(10);
+                            if(onzeKey.currentState!.check) heures.add(11);
+                            if(douzeKey.currentState!.check) heures.add(12);
+                            if(treizeKey.currentState!.check) heures.add(13);
+                            if(quatorzeKey.currentState!.check) heures.add(14);
+                            if(quinzeKey.currentState!.check) heures.add(15);
+                            if(seizeKey.currentState!.check) heures.add(16);
+                            if(dixSeptKey.currentState!.check) heures.add(17);
+
+                            //checking
+                            if(jours.isEmpty || heures.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            } else {
+                              setState((){
+                                activeStep++;
+                              });
+                            }
+                          }
+                        }
                       }
                     },
                     child: const BlockButton(text: "Suivant", linear: true, foregroundColor: Colors.white),
@@ -131,7 +228,7 @@ class CreationClientState extends State<CreationClient> {
           fontSize: 20,
         ),
       ),
-    ): Center(child: Image(image: AssetImage("assets/encaissement/check.png"),));
+    ): Center(child: Container( height: 120, width: 120, child: Image(image: AssetImage("assets/encaissement/check.png"),)));
   }
 
   // Returns the header text based on the activeStep.
@@ -180,61 +277,70 @@ class CreationClientState extends State<CreationClient> {
 
   Widget formInfoBasique() {
     return Form(
+        key: infosBasiqueKey,
         child: Column(
           children: [
             TextFormField(
               keyboardType: TextInputType.text,
+              initialValue: noms,
               decoration: const InputDecoration(
                 label: Text('Noms', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  noms = value;
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length<1) ? 'veuillez renseigner un nom' : null;
               },
             ),
             const SizedBox(height: 20,),
             TextFormField(
               keyboardType: TextInputType.text,
+              initialValue: prenoms,
               decoration: const InputDecoration(
                 label: Text('Prénoms', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  prenoms = value;
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length<1) ? 'veuillez renseigner un prénom' : null;
               },
             ),
             const SizedBox(height: 20,),
             TextFormField(
               keyboardType: TextInputType.text,
+              initialValue: secteur,
               decoration: const InputDecoration(
                 label: Text('Secteur d\'activité', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  secteur = value;
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length<1) ? 'Veuillez renseigner le secteur d\'activité' : null;
               },
             ),
             const SizedBox(height: 20,),
             TextFormField(
               keyboardType: TextInputType.number,
+              initialValue: (telephone != 0)?telephone.toString(): "",
               decoration: const InputDecoration(
                 label: Text('Téléphone', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  telephone = int.parse(value);
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length!=9) ? 'le numéro doit avoir 9 chiffres' : null;
               },
             ),
             const SizedBox(height: 20,),
@@ -248,19 +354,12 @@ class CreationClientState extends State<CreationClient> {
                       child: SizedBox(
                         height: 80,
                         width: MediaQuery.of(context).size.height - 40,
-                        child: TextFormField(
+                        child: TextField(
                           keyboardType: TextInputType.number,
                           enabled: false,
                           decoration: const InputDecoration(
                             label: Text('Localisation', style: TextStyle(fontSize: 14, color: Colors.black),),
                           ),
-                          onSaved: (String? value) {
-                            if (value!=null) {
-                            }
-                          },
-                          validator: (String? value) {
-                            return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
-                          },
                         ),
                       )
                   ),
@@ -284,47 +383,54 @@ class CreationClientState extends State<CreationClient> {
 
   Widget formPersonneAContacter() {
     return Form(
+        key: personneAContacterKey,
         child: Column(
           children: [
             TextFormField(
               keyboardType: TextInputType.text,
+              initialValue: nomsAContacter,
               decoration: const InputDecoration(
                 label: Text('Noms', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  nomsAContacter = value;
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length<1) ? 'veuillez renseigner un nom' : null;
               },
             ),
             const SizedBox(height: 20,),
             TextFormField(
               keyboardType: TextInputType.text,
+              initialValue: prenomsAContacter,
               decoration: const InputDecoration(
                 label: Text('Prénoms', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  prenomsAContacter = value;
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length<1) ? 'veuillez renseigner un prénom' : null;
               },
             ),
             const SizedBox(height: 20,),
             TextFormField(
               keyboardType: TextInputType.number,
+              initialValue: (telephoneAContacter != 0)?telephoneAContacter.toString(): "",
               decoration: const InputDecoration(
                 label: Text('Téléphone', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  telephoneAContacter = int.parse(value);
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length!=9) ? 'le numéro doit avoir 9 chiffres' : null;
               },
             ),
           ],
@@ -334,38 +440,77 @@ class CreationClientState extends State<CreationClient> {
 
   Widget formPhotos() {
     return Form(
+        key: photosKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
               keyboardType: TextInputType.number,
+              initialValue: (numeroCNI != 0)?numeroCNI.toString(): "",
               decoration: const InputDecoration(
                 label: Text('Numéro CNI', style: TextStyle(fontSize: 14, color: Colors.black),),
               ),
               onSaved: (String? value) {
                 if (value!=null) {
+                  numeroCNI = int.parse(value);
                 }
               },
               validator: (String? value) {
-                return (value !=null && value.length<9) ? 'le numéro doit avoir au moins 9 chiffres' : null;
+                return (value !=null && value.length<8) ? 'le numéro de la CNI doit avoir au moins 8 chiffres' : null;
               },
             ),
             const SizedBox(height: 30,),
             const Text('Photos de la CNI (recto)', style: TextStyle(fontSize: 14, color: Colors.black),),
             const SizedBox(height: 20,),
-            CardPhotoPick(width: MediaQuery.of(context).size.width - 40,),
+            CardPhotoPick(
+              key: photoCNIRectoKey,
+              width: MediaQuery.of(context).size.width - 40,
+              initialPhoto: photoCNIRecto,
+              fonc: (XFile file){
+                setState(() {
+                  photoCNIRecto = file;
+                });
+              },
+            ),
             const SizedBox(height: 30,),
             const Text('Photos de la CNI (verso)', style: TextStyle(fontSize: 14, color: Colors.black),),
             const SizedBox(height: 20,),
-            CardPhotoPick(width: MediaQuery.of(context).size.width - 40,),
+            CardPhotoPick(
+              key: photoCNIVersoKey,
+              width: MediaQuery.of(context).size.width - 40,
+              initialPhoto: photoCNIVerso,
+              fonc: (XFile file){
+                setState(() {
+                  photoCNIVerso = file;
+                });
+              },
+            ),
             const SizedBox(height: 30,),
             const Text('Photos du gérant', style: TextStyle(fontSize: 14, color: Colors.black),),
             const SizedBox(height: 20,),
-            CardPhotoPick(width: MediaQuery.of(context).size.width - 40,),
+            CardPhotoPick(
+              key: photoGerantKey,
+              width: MediaQuery.of(context).size.width - 40,
+              initialPhoto: photoGerant,
+              fonc: (XFile file){
+                setState(() {
+                  photoGerant = file;
+                });
+              },
+            ),
             const SizedBox(height: 30,),
             const Text('Photos du lieu', style: TextStyle(fontSize: 14, color: Colors.black),),
             const SizedBox(height: 20,),
-            CardPhotoPick(width: MediaQuery.of(context).size.width - 40,),
+            CardPhotoPick(
+              key: photoLieuKey,
+              width: MediaQuery.of(context).size.width - 40,
+              initialPhoto: photoLieu,
+              fonc: (XFile file){
+                setState(() {
+                  photoLieu = file;
+                });
+              },
+            ),
           ],
         )
     );
@@ -379,7 +524,7 @@ class CreationClientState extends State<CreationClient> {
         Center(
           child: InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement(noms: noms + prenoms)));
             },
             child: _encaissementBouton(),
           )
@@ -414,23 +559,23 @@ class CreationClientState extends State<CreationClient> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-                children: const [
-                  BlockSelected(texte: "Lundi", width: 118,),
+                children: [
+                  BlockSelected(key: lundiKey, texte: "Lundi", width: 118,),
                   SizedBox(height: 20,),
-                  BlockSelected(texte: "Mardi", width: 118,),
+                  BlockSelected(key: mardiKey, texte: "Mardi", width: 118,),
                   SizedBox(height: 20,),
-                  BlockSelected(texte: "Mercredi", width: 118,),
+                  BlockSelected(key: mercrediKey, texte: "Mercredi", width: 118,),
                   SizedBox(height: 20,),
-                  BlockSelected(texte: "Jeudi", width: 118,),
+                  BlockSelected(key: jeudiKey, texte: "Jeudi", width: 118,),
                 ],
               ),
               Column(
-                children: const [
-                  BlockSelected(texte: "Vendredi", width: 118,),
+                children:  [
+                  BlockSelected(key: vendrediKey, texte: "Vendredi", width: 118,),
                   SizedBox(height: 20,),
-                  BlockSelected(texte: "Samedi", width: 118,),
+                  BlockSelected(key: samediKey, texte: "Samedi", width: 118,),
                   SizedBox(height: 20,),
-                  BlockSelected(texte: "Dimanche", width: 118,),
+                  BlockSelected(key: dimancheKey, texte: "Dimanche", width: 118,),
                 ],
               ),
             ],
@@ -486,33 +631,29 @@ class CreationClientState extends State<CreationClient> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
-                  children: const [
-                    BlockSelected(texte: "08h-9h", width: 100,),
+                  children:  [
+                    BlockSelected(key: huitKey, texte: "08h-9h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "09h-10h", width: 100,),
+                    BlockSelected(key: neufKey,texte: "09h-10h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "10h-11h", width: 100,),
+                    BlockSelected(key: dixKey,texte: "10h-11h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "11h-12h", width: 100,),
+                    BlockSelected(key: onzeKey,texte: "11h-12h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "12h-13h", width: 100,),
-                    SizedBox(height: 20,),
-                    BlockSelected(texte: "13h-14h", width: 100,),
+                    BlockSelected(key: douzeKey,texte: "12h-13h", width: 100,),
                   ],
                 ),
                 Column(
-                  children: const [
-                    BlockSelected(texte: "14h-15h", width: 100,),
+                  children:  [
+                    BlockSelected(key: treizeKey,texte: "13h-14h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "15h-16h", width: 100,),
+                    BlockSelected(key: quatorzeKey,texte: "14h-15h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "16h-17h", width: 100,),
+                    BlockSelected(key: quinzeKey,texte: "15h-16h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "17h-18h", width: 100,),
+                    BlockSelected(key: seizeKey,texte: "16h-17h", width: 100,),
                     SizedBox(height: 20,),
-                    BlockSelected(texte: "18h-19h", width: 100,),
-                    SizedBox(height: 20,),
-                    BlockSelected(texte: "19h-20h", width: 100,),
+                    BlockSelected(key: dixSeptKey,texte: "17h-18h", width: 100,),
                   ],
                 ),
               ],

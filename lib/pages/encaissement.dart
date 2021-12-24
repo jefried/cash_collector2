@@ -1,14 +1,9 @@
-import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/app_bar_content.dart';
 import 'package:cash_collector/composants/block_button.dart';
 import 'package:cash_collector/composants/payment_block.dart';
-import 'package:cash_collector/composants/switch_activity_state.dart';
-import 'package:cash_collector/helpers/colors.dart';
 import 'package:cash_collector/pages/encaissement2.dart';
-import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 enum PaymentMode {
   orange,
@@ -18,7 +13,8 @@ enum PaymentMode {
 }
 
 class Encaissement extends StatefulWidget {
-  const Encaissement({Key? key}) : super(key: key);
+  const Encaissement({Key? key, required this.noms}) : super(key: key);
+  final String? noms;
 
   @override
   EncaissementState createState() => EncaissementState();
@@ -26,9 +22,11 @@ class Encaissement extends StatefulWidget {
 }
 
 class EncaissementState extends State<Encaissement> {
-  bool cash = true;
   PaymentMode paymentMode = PaymentMode.cash;
   bool workStatus=true;
+  int montant = 0;
+  int telephone = 0;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -105,91 +103,119 @@ class EncaissementState extends State<Encaissement> {
                 ),
               ),
               const SizedBox(height: 30,),
-              (paymentMode != PaymentMode.cash)?
-              Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  padding: const EdgeInsets.only(top: 8),
-                  width: MediaQuery.of(context).size.width,
-                  height: 58,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xFFBEBEBE),
-                          blurRadius: 6,
-                          offset: Offset(0,3),
-                        )
-                      ]
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    (paymentMode != PaymentMode.cash)?
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.only(top: 8),
+                      width: MediaQuery.of(context).size.width,
+                      height: 58,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xFFBEBEBE),
+                              blurRadius: 6,
+                              offset: Offset(0,3),
+                            )
+                          ]
 
-                  ),
-                  child: const TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent, width: 5.0),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent, width: 5.0),
-                      ),
-                      label: Text("Numéro de téléphone", style: TextStyle(color: Color(0xFFBEBEBE)),),
-                      hintText: 'Numéro de téléphone',
-                    ),
-                  ),
-              ): Container(),
-              const SizedBox(height: 20,),
-              Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  padding: const EdgeInsets.only(top: 8),
-                  width: MediaQuery.of(context).size.width,
-                  height: 58,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xFFBEBEBE),
-                          blurRadius: 6,
-                          offset: Offset(0,3),
-                        )
-                      ]
-
-                  ),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent, width: 5.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent, width: 5.0),
-                            ),
-                            label: Text("Montant à encaisser", style: TextStyle(color: Color(0xFFBEBEBE)),),
-                            hintText: 'Montant à encaisser',
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent, width: 5.0),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent, width: 5.0),
+                          ),
+                          label: Text("Numéro de téléphone", style: TextStyle(color: Color(0xFFBEBEBE)),),
+                          hintText: 'Numéro de téléphone',
                         ),
+                        onSaved: (value){
+                          telephone = int.parse(value!);
+                        },
+                        validator: (value){
+                          if(value!.isEmpty || value == null) {
+                            return "Veuillez entrer un numéro de téléphone";
+                          } else if (value.length != 9){
+                            return "Veuillez entrer un numéro à 9 chiffres";
+                          }
+                        },
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        height: 48,
-                        width: 48,
-                        child: const Center(child: Text("FCFA", style: TextStyle(color: Color(0xFF585757)),),),
+                    ): Container(),
+                    const SizedBox(height: 20,),
+                    Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.only(top: 8),
+                        width: MediaQuery.of(context).size.width,
+                        height: 58,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0xFFBEBEBE),
+                                blurRadius: 6,
+                                offset: Offset(0,3),
+                              )
+                            ]
 
-                      )
-                    ],
-                  )
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.transparent, width: 5.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.transparent, width: 5.0),
+                                    ),
+                                    label: Text("Montant à encaisser", style: TextStyle(color: Color(0xFFBEBEBE)),),
+                                    hintText: 'Montant à encaisser',
+                                  ),
+                                  onSaved: (value){
+                                    montant = int.parse(value!);
+                                  },
+                                  validator: (value){
+                                    if(value!.isEmpty || value == null) {
+                                      return "Veuillez entrer un montant";
+                                    }
+                                  },
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(right: 10),
+                              height: 48,
+                              width: 48,
+                              child: const Center(child: Text("FCFA", style: TextStyle(color: Color(0xFF585757)),),),
+
+                            )
+                          ],
+                        )
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 30,),
               InkWell(
                 onTap: (){
-                  showDialog(
+                  if(formKey.currentState!.validate()){
+                    formKey.currentState!.save();
+                    showDialog(
                       context: context,
-                      builder: (_) => _alert("Ondua Jacqueline", "+237 650 000 000", "10 000"),
+                      builder: (_) => _alert(widget.noms!, telephone.toString(), montant.toString()),
                       barrierDismissible: false,
-                  );
+                    );
+                  }
                 },
                 child: Center(
                   child: _continuerBouton(),
@@ -260,7 +286,7 @@ class EncaissementState extends State<Encaissement> {
               ),
               const SizedBox(width: 18,),
               InkWell(
-                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement2()));},
+                onTap: (){Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Encaissement2()), (route)=>false);},
                 child: const BlockButton(text: "Confirmer", foregroundColor: Colors.white, linear: true,),
               ),
               const SizedBox(width: 18,),

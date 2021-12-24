@@ -141,7 +141,7 @@ class ClientPresentItem extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement(noms: name)));
                 },
               )
             ]

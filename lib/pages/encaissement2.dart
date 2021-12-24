@@ -51,7 +51,7 @@ class Encaissement2State extends State<Encaissement2> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Center(
-                      child: Image(image: AssetImage("assets/encaissement/check.png"),),
+                      child: Container(height: 120, width: 120, child: Image(image: AssetImage("assets/encaissement/check.png"),)),
                     ),
                   ),
                   SizedBox(height: 20,),

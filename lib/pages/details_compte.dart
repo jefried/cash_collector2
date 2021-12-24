@@ -1,17 +1,13 @@
 import 'dart:ui';
 
-import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/app_bar_content.dart';
 import 'package:cash_collector/composants/block_button.dart';
 import 'package:cash_collector/composants/button_transport.dart';
 import 'package:cash_collector/composants/circular_button.dart';
 import 'package:cash_collector/composants/history_transaction.dart';
-import 'package:cash_collector/composants/switch_activity_state.dart';
-import 'package:cash_collector/helpers/colors.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:cash_collector/pages/encaissement.dart';
@@ -23,7 +19,9 @@ enum Onglet {
 }
 
 class DetailCompte extends StatefulWidget {
-  const DetailCompte({Key? key}) : super(key: key);
+  const DetailCompte({Key? key, required this.noms, required this.localisation}) : super(key: key);
+  final String noms;
+  final String localisation;
 
   @override
   DetailCompteState createState() => DetailCompteState();
@@ -35,6 +33,12 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
   late TabController tabController;
   int currentIndex = 0;
   bool workStatus = true;
+  String activite = "Commerçante";
+  String telephone = "+237 650 000000";
+  String cni = "100 020 001 000";
+  String nomAContacter = "Donald Trump";
+  String telephoneAContacter = "+237 650 000000";
+  String localisationAContacter = "Marché Melen - Yaoundé";
   List transactionsHist = [
     {
       'success': false,
@@ -208,7 +212,7 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
                         });*/
                         //await FlutterPhoneDirectCaller.callNumber(number);
                         //launch('tel://+237652692742');
-                        customLaunch('tel:+237652692742');
+                        customLaunch('tel:${telephone}');
                       },
                       child: CircularButton(icon: Icons.phone, foregroundColor: (onglet == Onglet.appels)?const Color(0xFF075BD5):const Color(0xFF707070), colorShadow: (onglet == Onglet.appels)?const Color(0xFF075BD5):const Color(0xFFBEBEBE),),
                     )
@@ -219,7 +223,7 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
                   bottom: 8,
                   right: 0,
                   child: InkWell(
-                    onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement()));},
+                    onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Encaissement(noms: widget.noms,)));},
                     child: SizedBox(
                       height: 47,
                       width: 135,
@@ -263,9 +267,9 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    ButtonTransport(icon: Icons.directions_car, mode: "En Voiture", time: "10 min", distance: "2,8 mi",),
+                    ButtonTransport(icon: Icons.directions_car, mode: "en Voiture", time: "10 min", distance: "2,8 km",),
                     SizedBox(width: 10,),
-                    ButtonTransport(icon: Icons.directions_walk, mode: "A pied", time: "25 min", distance: "5,8 mi",),
+                    ButtonTransport(icon: Icons.directions_walk, mode: "à pied", time: "25 min", distance: "5,8 km",),
                   ],
                 ),
               )
@@ -348,26 +352,26 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           SizedBox(height: 10,),
           ListTile(
             leading: Icon(Icons.contact_mail),
-            title: Text("Secteur d'activité - Commerçante", style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
+            title: Text("Secteur d'activité - " + activite, style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text("Téléphone  -  +237 650 000000", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("Téléphone  -  " + telephone, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(CupertinoIcons.location),
-            title: Text("Marché Melen  -  Yaoundé", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text(widget.localisation, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(Icons.lock),
-            title: Text("CNI  -  100 020 001 000", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("CNI  -  " + cni, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
           SizedBox(height: 20,),
@@ -382,17 +386,17 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
           SizedBox(height: 20,),
           ListTile(
             leading: Icon(Icons.contact_mail),
-            title: Text("Donald Trump", style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
+            title: Text(nomAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text("Téléphone  -  +237 650 000000", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("Téléphone  -  " + telephoneAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(CupertinoIcons.location),
-            title: Text("Marché Melen  -  Yaoundé", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text(localisationAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
           ),
           Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
         ],
