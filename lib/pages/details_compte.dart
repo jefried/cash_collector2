@@ -251,9 +251,19 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    ButtonTransport(icon: Icons.directions_car, mode: "En Voiture", time: "10 min", distance: "2,8 mi",),
+                    ButtonTransport(
+                      icon: Icons.directions_car,
+                      mode: "En Voiture",
+                      time: "10 min",
+                      distance: "2,8 mi",
+                    ),
                     SizedBox(width: 10,),
-                    ButtonTransport(icon: Icons.directions_walk, mode: "A pied", time: "25 min", distance: "5,8 mi",),
+                    ButtonTransport(
+                      icon: Icons.directions_walk,
+                      mode: "A pied",
+                      time: "25 min",
+                      distance: "5,8 mi",
+                    ),
                   ],
                 ),
               )
@@ -340,49 +350,49 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
           SizedBox(height: 10,),
           ListTile(
             leading: Icon(Icons.contact_mail),
-            title: Text("Secteur d'activité - Commerçante", style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
+            title: Text("Secteur d'activité - Commerçante", style: TextStyle(fontSize: 13, color: infosColor1),),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text("Téléphone  -  +237 650 000000", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("Téléphone  -  +237 650 000000", style: TextStyle(fontSize: 13, color: infosColor1)),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(CupertinoIcons.location),
-            title: Text("Marché Melen  -  Yaoundé", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("Marché Melen  -  Yaoundé", style: TextStyle(fontSize: 13, color: infosColor1)),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(Icons.lock),
-            title: Text("CNI  -  100 020 001 000", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("CNI  -  100 020 001 000", style: TextStyle(fontSize: 13, color: infosColor1)),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
           SizedBox(height: 20,),
           Padding(
             padding: EdgeInsets.only(left: 8),
             child: Text("Personne à contacter", style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF707070),
+              color: infosColor1,
             )),
           ),
           SizedBox(height: 20,),
           ListTile(
             leading: Icon(Icons.contact_mail),
-            title: Text("Donald Trump", style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
+            title: Text("Donald Trump", style: TextStyle(fontSize: 13, color: infosColor1),),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text("Téléphone  -  +237 650 000000", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("Téléphone  -  +237 650 000000", style: TextStyle(fontSize: 13, color: infosColor1)),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
           ListTile(
             leading: Icon(CupertinoIcons.location),
-            title: Text("Marché Melen  -  Yaoundé", style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            title: Text("Marché Melen  -  Yaoundé", style: TextStyle(fontSize: 13, color: infosColor1)),
           ),
-          Divider(color: Color(0xFF707070), indent: 15, endIndent: 15,),
+          Divider(color: infosColor1, indent: 15, endIndent: 15,),
         ],
       ),
     );
@@ -400,7 +410,13 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
         child: ListView(
           shrinkWrap: false,
           children: transactionsHist.map(
-                  (transaction) => HistoryTransaction(success: transaction['success'], dateTime: transaction['datetime'], amount: transaction['amount'], imagePath: transaction['image_path'], typeTransaction: transaction['type_transaction'])
+            (transaction) => HistoryTransaction(
+                success: transaction['success'],
+                dateTime: transaction['datetime'],
+                amount: transaction['amount'],
+                imagePath: transaction['image_path'],
+                typeTransaction: transaction['type_transaction']
+            )
           ).toList(),
         ),
     );

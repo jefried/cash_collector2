@@ -28,18 +28,18 @@ class HomeDrawer extends StatelessWidget {
           child: Stack(
             children: [
               Positioned(
-                top: -59,
+                top: -60,
                 left: -132,
-                right: 0,
+                right: -50,
                 child: Container(
                   height: 240,
-                  width: 463 * scaleWidth,
+                  // width: 463 * scaleWidth,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
-                          'assets/images/drawer_background.png'
+                        'assets/images/drawer_background.png',
                       ),
-                      fit: BoxFit.fill
+                      fit: BoxFit.fill,
                     )
                   ),
                 ),
@@ -60,7 +60,7 @@ class HomeDrawer extends StatelessWidget {
                     child: const Icon(
                       Icons.person,
                       size: 24,
-                      color: Color(0xFFC24644),
+                      color: principalColor,
                     ),
                   ),
                   title: SizedBox(

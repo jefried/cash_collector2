@@ -331,11 +331,16 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
           SizedBox(height: 30,),
           Padding(
             padding: EdgeInsets.only(left: 20),
-            child: Text("Collecte récentes", style: TextStyle(fontSize: 20),),
+            child: Text(
+              "Collecte récentes",
+              style: TextStyle(
+                fontSize: 20
+              ),
+            ),
           ),
           SizedBox(height: 20,),
           Container(
-            height: 85,
+            height: 90,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
@@ -369,7 +374,6 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
 
   Widget _collecte(String nom, String montant, String mode) {
     return Container(
-      height: 81,
       width: 235,
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.all(8),
@@ -400,16 +404,39 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
             ),
           ),
           SizedBox(width: 10,),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(nom, style: TextStyle(color: stepperColor,),),
-              SizedBox(height: 3,),
-              Text("XAF" + montant, style: TextStyle(color: textColorGreyAccent,),),
-              SizedBox(height: 3,),
-              Text(mode, style: TextStyle(color: textColorGreyAccent,),),
-
-            ],
+          SizedBox(
+            width: 145,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  nom+"eerzrzerzr",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: stepperColor,
+                  ),
+                ),
+                SizedBox(height: 3,),
+                Text(
+                  "XAF" + montant,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: textColorGreyAccent,
+                  ),
+                ),
+                SizedBox(height: 3,),
+                Text(
+                  mode,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: textColorGreyAccent,
+                  ),
+                ),
+              ],
+            ),
           )
         ],
       ),

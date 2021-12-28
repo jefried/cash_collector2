@@ -124,19 +124,12 @@ class _HomeState extends State<Home> {
                 )
             ),
             Positioned(
-              bottom: 240,
-              right: 20,
+              bottom: 230,
+              right: 5,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //       color: shadowColor2.withOpacity(0.29),
-                  //       offset: const Offset(0, 3),
-                  //       blurRadius: 13
-                  //   )
-                  // ]
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white.withOpacity(0.65),
                 ),
                 child: MaterialButton(
                   onPressed: () {
@@ -149,17 +142,10 @@ class _HomeState extends State<Home> {
                       children: [
                         Text(
                           'Voir Tout',
-                          style:  TextStyle(
-                              fontSize: 13,
-                              fontFamily: 'Poppins Medium',
-                              color: secondaryColor,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(4, 5),
-                                  color: shadowColor2.withOpacity(0.29),
-                                  blurRadius: 5
-                                )
-                            ]
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontFamily: 'Poppins Medium',
+                            color: secondaryColor,
                           ),
                         ),
                         const Icon(

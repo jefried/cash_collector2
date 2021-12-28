@@ -34,10 +34,10 @@ class HistoryTransaction extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       margin: const EdgeInsets.only(bottom: 15, left: 8, right: 8),
       width: double.infinity,
-      height: 90,
+      height: 80,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -56,8 +56,8 @@ class HistoryTransaction extends StatelessWidget {
             children: [
               Icon(
                 success ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.xmark_circle_fill,
-                size: 50,
-                color: success ? const Color(0xFF1FB503) : const Color(0xFFED103A),
+                size: 45,
+                color: success ? successColor : dangerColor,
               ),
               const SizedBox(width: 16,),
               Column(
@@ -75,7 +75,7 @@ class HistoryTransaction extends StatelessWidget {
                     formatMoney(amount, 'fr'),
                     style: const TextStyle(
                       fontFamily: 'Poppins Light',
-                      fontSize: 16,
+                      fontSize: 15,
                       color: colorText1
                     ),
                   ),

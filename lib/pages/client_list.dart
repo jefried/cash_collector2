@@ -113,14 +113,20 @@ class _ClientListState extends State<ClientList> {
                     ),
                     Flexible(
                       flex: 1,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                              color: infosColor1,
-                              borderRadius: BorderRadius.circular(12)
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        height: 32,
+                        decoration: BoxDecoration(
+                            color: infosColor1,
+                            borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)
                           ),
+                          onPressed: () {
+
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -139,7 +145,7 @@ class _ClientListState extends State<ClientList> {
                               )
                             ],
                           ),
-                        )
+                        ),
                       ),
                     )
                   ],

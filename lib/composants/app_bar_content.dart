@@ -26,6 +26,7 @@ class _AppBarContentState extends State<AppBarContent> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
+      titleSpacing: 0,
       leading: widget.leading? IconButton(
         icon: Icon(
           widget.icon,

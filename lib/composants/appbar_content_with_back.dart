@@ -21,6 +21,7 @@ class AppBarContentWithBackState extends State<AppBarContentWithBack> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
+      titleSpacing: 0,
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios,

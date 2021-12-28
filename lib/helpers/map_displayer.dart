@@ -15,7 +15,6 @@ class MapDisplayer {
   HereMapController _hereMapController;
   MapCamera _camera;
   MapImage? _poiMapImage;
-  List<MapMarker> _mapMarkerList = [];
   List<WidgetPinClient> _mapWidgetMarkerList = [];
   List<MapPolyline> _mapPolylines = [];
   WidgetPinClient? _selectedWidgetClient;
