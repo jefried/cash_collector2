@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BlockButton extends StatelessWidget {
-  const BlockButton({Key? key, this.text='', this.linear = false, this.linearColor1 = const Color(0xFFC24644), this.linearColor2 = const Color(0xFF8F1716), this.backgroundColor = const Color(0xFFFFFFFF), this.foregroundColor = const Color(0xFF075BD5), this.colorShadow = const Color(0xFFBEBEBE), this.shadow = false}):super(key: key);
+  const BlockButton({Key? key, this.text='', this.linear = false, this.linearColor1 = const Color(0xFFC24644), this.linearColor2 = const Color(0xFF8F1716), this.backgroundColor = const Color(0xFFFFFFFF), this.foregroundColor = const Color(0xFF075BD5), this.colorShadow = const Color(0xFFBEBEBE), this.shadow = false, this.bold = true,}):super(key: key);
   final String text;
   final Color backgroundColor;
   final Color foregroundColor;
@@ -10,6 +10,7 @@ class BlockButton extends StatelessWidget {
   final Color linearColor1;
   final Color linearColor2;
   final Color colorShadow;
+  final bool bold;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class BlockButton extends StatelessWidget {
       ),
       child: Center(child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: Text(text, style: TextStyle(color: foregroundColor, fontSize: 15, fontWeight: FontWeight.bold),),
+        child: Text(text, style: TextStyle(color: foregroundColor, fontSize: 15, fontWeight: bold?FontWeight.bold: FontWeight.normal),),
       )),
     );
   }

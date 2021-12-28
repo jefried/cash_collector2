@@ -3,16 +3,19 @@ import 'package:cash_collector/composants/switch_activity_state.dart';
 import 'package:cash_collector/helpers/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cash_collector/pages/notifications.dart' as notif;
 
 class AppBarContent extends StatefulWidget {
   final Function onPressBtnMenu;
   final String title;
   final IconData icon;
   final bool leading = true;
+  final bool noti;
   const AppBarContent({
     Key? key,
     required this.onPressBtnMenu,
     required this.title,
+    this.noti = true,
     this.icon = Icons.menu_rounded
   }) : super(key: key);
 
@@ -58,9 +61,11 @@ class _AppBarContentState extends State<AppBarContent> {
       ),
       actions: [
         const SwitchActivity(),
-        Badge(
+        widget.noti?Badge(
           child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const notif.Notification()));
+              },
               icon: const Icon(
                 Icons.notifications_outlined,
                 color: infosColor1,
@@ -78,7 +83,7 @@ class _AppBarContentState extends State<AppBarContent> {
                 fontSize: 10
             ),
           ),
-        ),
+        ): SizedBox(),
       ],
     );
   }

@@ -1,12 +1,8 @@
-import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/app_bar_content.dart';
 import 'package:cash_collector/composants/block_button.dart';
-import 'package:cash_collector/composants/switch_activity_state.dart';
-import 'package:cash_collector/helpers/colors.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class Dashboard extends StatefulWidget {
@@ -20,6 +16,23 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
   final List<charts.Series<LinearSales, int>> seriesList = _createSampleData();
   List<charts.Series<Task, String>> _seriesPieData = [];
   final bool animate = true;
+  final double solde = 540000;
+  final String date = "09 Dec 2021";
+  final double montantACollecte = 540000;
+  final double resteACollecter = 120000;
+  final nbreCollecte = 35;
+  final List<Collecte> collectes = [
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+    Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
+  ];
 
   _generateData() {
     List<Task> mydata = <Task>[
@@ -62,13 +75,6 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
       LinearSales(24, 150),
     ];
 
-    final mobileSalesData = [
-      LinearSales(0, 10),
-      LinearSales(1, 50),
-      LinearSales(2, 200),
-      LinearSales(3, 150),
-    ];
-
     return [
       charts.Series<LinearSales, int>(
         id: 'Desktop',
@@ -106,7 +112,6 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    double appBarSize = 85;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -143,9 +148,9 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text("Votre solde", style: TextStyle(color: textColorGreyAccent, fontSize: 14),),
-                              Text("XAF 540 000", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
+                              Text("XAF ${solde.toString()}", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),)
                             ],
                           ),
                         ),
@@ -222,13 +227,13 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
           SizedBox(height: 20,),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: const [
+            children: [
               SizedBox(width: 15,),
-              Text("35", style: TextStyle(color: Color(0xFFFFC700), fontSize: 40),),
+              Text(nbreCollecte.toString(), style: TextStyle(color: Color(0xFFFFC700), fontSize: 25),),
               SizedBox(width: 5,),
               Text("Collectes", style: TextStyle(fontSize: 16, color: textColorGrey),),
               Expanded(child: SizedBox(),),
-              Text("09 Dec 2021", style: TextStyle(fontSize: 16, color: textColorGrey),),
+              Text(date.toString(), style: TextStyle(fontSize: 16, color: textColorGrey),),
               SizedBox(width: 15,),
             ],
           ),
@@ -254,9 +259,9 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                 Row(
                   children: [
                     SizedBox(width: 10,),
-                    _block(Color(0xFF7BB1FF),"Collecté", "540 000", Icons.arrow_circle_down),
+                    _block(Color(0xFF7BB1FF),"Collecté", montantACollecte.toString(), Icons.arrow_circle_down),
                     Expanded(child: Container()),
-                    _block(Color(0xFFF86B6D),"Reste à Collecter", "120 000", Icons.arrow_circle_up),
+                    _block(Color(0xFFF86B6D),"Reste à Collecter", resteACollecter.toString(), Icons.arrow_circle_up),
                     SizedBox(width: 10,),
                   ],
                 ),
@@ -332,7 +337,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
           Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
-              "Collecte récentes",
+              "Collectes récentes",
               style: TextStyle(
                 fontSize: 20
               ),
@@ -343,9 +348,9 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
             height: 90,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 10,
+                itemCount: collectes.length,
                 itemBuilder: (BuildContext context,int index){
-                  return _collecte("Ondua Jacqueline", "10 000", "MTN Mobile Money");
+                  return _collecte(collectes[index]);
                 }
             ),
           )
@@ -372,7 +377,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
     );
   }
 
-  Widget _collecte(String nom, String montant, String mode) {
+  Widget _collecte(Collecte collecte) {
     return Container(
       width: 235,
       padding: EdgeInsets.all(5),
@@ -410,7 +415,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  nom+"eerzrzerzr",
+                  collecte.noms!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -419,7 +424,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                 ),
                 SizedBox(height: 3,),
                 Text(
-                  "XAF" + montant,
+                  "XAF" + collecte.montant!.toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -428,7 +433,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                 ),
                 SizedBox(height: 3,),
                 Text(
-                  mode,
+                  collecte.modePayment!.toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -473,4 +478,12 @@ class Task {
     // TODO: implement toString
     return "Record<$taskVal:$taskDetails>";
   }
+}
+
+class Collecte {
+  String? noms;
+  double? montant;
+  String? modePayment;
+
+  Collecte({this.noms, this.montant, this.modePayment});
 }

@@ -95,7 +95,7 @@ class ConnexionState extends State<Connexion> {
                 if(loginFormKey.currentState!.validate()){
                   loginFormKey.currentState!.save();
                 }
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Home()), (route)=>false);
               },
               child: Container(
                 decoration: BoxDecoration(
