@@ -8,6 +8,7 @@ const shadowColor1 = Color(0xFFBEBEBE);
 const shadowColor2 = Color(0xFF000000);
 const backgroundColor1 = Color(0xFFF3F3FF);
 const namePresentColor = Color(0xFF075BD5);
+const routeColor = Color(0xFF075BD5);
 const secondaryColor = Color(0xFFC24644);
 const principalColor = Color(0xFF8F1716);
 const successColor = Color(0xFF1FB503);

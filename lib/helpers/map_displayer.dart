@@ -14,7 +14,6 @@ import 'package:speech_balloon/speech_balloon.dart';
 class MapDisplayer {
   HereMapController _hereMapController;
   MapCamera _camera;
-  MapImage? _poiMapImage;
   List<WidgetPinClient> _mapWidgetMarkerList = [];
   List<MapPolyline> _mapPolylines = [];
   WidgetPinClient? _selectedWidgetClient;
@@ -23,6 +22,7 @@ class MapDisplayer {
   late RoutingEngine _routingEngine;
   Anchor2D anchor2D = Anchor2D.withHorizontalAndVertical(0.5, 1);
   GeoCoordinates _currentCoordinate;
+  List<GeoCoordinates>? geoCoordinates;
 
   MapDisplayer(HereMapController hereMapController, List<Map<String, dynamic>> clientsInfos, BuildContext ctx, Position? position):
       _camera = hereMapController.camera,
@@ -39,6 +39,7 @@ class MapDisplayer {
       }
     ).toList();
     geoCoordinateList.add(_currentCoordinate);
+    geoCoordinates = geoCoordinateList;
     _hereMapController.pinWidget(
       const Icon(
         Icons.mode_standby_sharp,
@@ -56,15 +57,21 @@ class MapDisplayer {
     }
   }
 
+  replaceCamera(){
+    GeoBox target = GeoBox.containingGeoCoordinates(geoCoordinates!)!;
+    _camera.lookAtAreaWithGeoOrientation(target, GeoOrientationUpdate(20, 0));
+  }
+
   int? getSelectedClientId(){
     return _selectedWidgetClient?.clientId;
   }
 
-  setClientAsSelected(int clientId, String imageUrl, String name){
+  setClientAsSelected(int clientId, String imageUrl, String name, clientName){
     if (_selectedWidgetClient != null){
       if (_selectedWidgetClient?.clientId == clientId){
         return null;
       }
+      replaceCamera();
       WidgetPinClient lastSelectedPinClient = _selectedWidgetClient!;
       lastSelectedPinClient.widgetPin.unpin();
       _mapWidgetMarkerList.remove(lastSelectedPinClient);
@@ -78,7 +85,7 @@ class MapDisplayer {
     WidgetPin widgetPin = widgetPinClient.widgetPin;
     widgetPin.unpin();
     _mapWidgetMarkerList.remove(widgetPinClient);
-    _addWidgetMapMarkerOnSelected(widgetPinClient.widgetPin.coordinates, clientId, imageUrl, name);
+    _addWidgetMapMarkerOnSelected(widgetPinClient.widgetPin.coordinates, clientId, imageUrl, name, clientName);
   }
 
   void _addMapMarker(GeoCoordinates? geoCoordinates, int idClient) {
@@ -107,14 +114,6 @@ class MapDisplayer {
 
   }
 
-  void _showRouteDetails(here.Route route) {
-    int estimatedTravelTimeInSeconds = route.durationInSeconds;
-    int lengthInMeters = route.lengthInMeters;
-
-    String routeDetails =
-        'Travel Time: ' + _formatTime(estimatedTravelTimeInSeconds) + ', Length: ' + _formatLength(lengthInMeters);
-  }
-
   String _formatTime(int sec) {
     int hours = sec ~/ 3600;
     int minutes = (sec % 3600) ~/ 60;
@@ -129,14 +128,6 @@ class MapDisplayer {
     return '$kilometers.$remainingMeters km';
   }
 
-
-  void _logRouteViolations(here.Route route) {
-    for (var section in route.sections) {
-      for (var notice in section.sectionNotices) {
-        print("This route contains the following warning: " + notice.code.toString());
-      }
-    }
-  }
 
   void clearMap() {
     for (var mapPolyline in _mapPolylines) {
@@ -154,28 +145,36 @@ class MapDisplayer {
     List<Waypoint> waypoints = [startWaypoint, destinationWaypoint];
 
     _routingEngine.calculateCarRoute(waypoints, CarOptions.withDefaults(),
-            (RoutingError? routingError, List<here.Route>? routeList) async {
-          if (routingError == null) {
-            // When error is null, then the list guaranteed to be not null.
-            here.Route route = routeList!.first;
-            _showRouteDetails(route);
-            _showRouteOnMap(route);
-            _logRouteViolations(route);
-          } else {
-            var error = routingError.toString();
-            // _showDialog('Error', 'Error while calculating a route: $error');
-          }
-        });
+      (RoutingError? routingError, List<here.Route>? routeList) async {
+        if (routingError == null) {
+          // When error is null, then the list guaranteed to be not null.
+          here.Route route = routeList!.first;
+          _showRouteOnMap(route);
+        } else {
+          var error = routingError.toString();
+          // _showDialog('Error', 'Error while calculating a route: $error');
+        }
+      });
   }
 
-  void _addWidgetMapMarkerOnSelected(GeoCoordinates? geoCoordinates, int idClient, String imageUrl, String name)  {
+  void _addWidgetMapMarkerOnSelected(GeoCoordinates? geoCoordinates, int idClient, String imageUrl, String name, String clientName)  {
     WidgetPin widgetPin = _hereMapController.pinWidget(
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailCompte(noms: "Ondua Jacqueline", localisation: name,)));
+                Navigator.push(context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    DetailCompte(
+                      noms: clientName,
+                      localisation: name,
+                      geoCoordinates: geoCoordinates!,
+                      profilImgPath: imageUrl,
+                    )
+                  )
+                );
               },
               child: SpeechBalloon(
                 nipHeight: 15,

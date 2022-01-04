@@ -28,36 +28,42 @@ class _HomeState extends State<Home> {
       'id': 1,
       'name': 'Sondi Manga',
       'adress': 'Melen, Yaoundé',
-      'latitude': 3.8754212,
-      'longitude': 11.511222
+      'latitude': 3.8624,
+      'longitude': 11.5,
+      'imgPath': 'assets/images/asset1.jpg'
     },
     {
       'id': 2,
       'name': 'Malina Jenevièvre',
       'adress': 'Oyomabang, Yaoundé',
-      'latitude': 3.8712532,
-      'longitude': 11.5184521
+      'latitude': 3.8608627,
+      'longitude': 11.5098449,
+      'imgPath': 'assets/details_compte/profil.jpg'
     },
     {
       'id': 3,
       'name': 'Lili goumette',
       'adress': 'Melen, Yaoundé',
-      'latitude': 3.8798451,
-      'longitude': 11.514121
+      'latitude': 3.8857832,
+      'longitude': 11.5457261,
+      'imgPath': 'assets/images/asset1.jpg'
     },
     {
       'id': 4,
       'name': 'Sondi Manga',
       'adress': 'Melen, Yaoundé',
-      'latitude': 3.870125,
-      'longitude': 11.508654
+      'latitude': 3.8482683,
+      'longitude': 11.5647734,
+      'imgPath': 'assets/details_compte/profil.jpg'
+
     },
     {
       'id': 5,
       'name': 'Malina Jenevièvre',
       'adress': 'Oyomabang, Yaoundé',
-      'latitude': 3.877784,
-      'longitude': 11.519412
+      'latitude': 3.868103,
+      'longitude': 11.500214,
+      'imgPath': 'assets/details_compte/profil.jpg'
     },
   ];
 
@@ -168,12 +174,17 @@ class _HomeState extends State<Home> {
                 scrollDirection: Axis.horizontal,
                 children: clientsInfos.map(
                   (clientInfo) => ClientPresentCardHome(
-                    imageUrl: 'assets/images/asset1.jpg',
+                    imageUrl: clientInfo['imgPath'],
                     address: clientInfo['adress']!,
                     name: clientInfo['name']!,
                     isClicked: clientInfo['id'] == selectedClientId,
                     onPress: () {
-                      mapDisplayer?.setClientAsSelected(clientInfo['id'], 'assets/images/asset1.jpg', clientInfo['adress']!);
+                      mapDisplayer?.setClientAsSelected(
+                        clientInfo['id'],
+                        clientInfo['imgPath'],
+                        clientInfo['adress']!,
+                        clientInfo['name']
+                      );
                       setState(() {
                         selectedClientId = clientInfo['id'];
                       });
