@@ -260,11 +260,10 @@ class EncaissementState extends State<Encaissement> {
             decoration: BoxDecoration(
                 color: const Color(0xFFF6F6F6),
                 borderRadius: BorderRadius.circular(15),
-
-
             ),
             child: const TextField(
               keyboardType: TextInputType.number,
+              obscureText: true,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent, width: 5.0),

@@ -61,6 +61,7 @@ class _AppBarContentState extends State<AppBarContent> {
       ),
       actions: [
         const SwitchActivity(),
+        widget.noti?SizedBox():SizedBox(width: 20,),
         widget.noti?Badge(
           child: IconButton(
               onPressed: () {

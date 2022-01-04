@@ -15,8 +15,8 @@ class Notif extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: textColorGreyAccent,
-            blurRadius: 9,
-            offset: Offset(3,3),
+            blurRadius: 2,
+            offset: Offset(1,3),
           )
         ]
       ),

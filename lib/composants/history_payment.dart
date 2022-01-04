@@ -32,8 +32,8 @@ class HistoryPayment extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: shadowColor2.withOpacity(0.29),
-            offset: const Offset(3, 3),
-            blurRadius: 9
+            offset: const Offset(1, 3),
+            blurRadius: 2
           )
         ]
       ),

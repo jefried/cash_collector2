@@ -17,10 +17,18 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
   List<charts.Series<Task, String>> _seriesPieData = [];
   final bool animate = true;
   final double solde = 540000;
-  final String date = "09 Dec 2021";
-  final double montantACollecte = 540000;
-  final double resteACollecter = 120000;
-  final nbreCollecte = 35;
+  final String dateJour = "09 Dec 2021";
+  final String dateSemaine = "09-14 Dec 2021";
+  final String dateMois = "Dec 2021";
+  final double montantCollecteJour = 540000;
+  final double montantCollecteSemaine = 2500000;
+  final double montantCollecteMois = 9000000;
+  final double resteACollecterJour = 120000;
+  final double resteACollecterSemaine = 600000;
+  final double resteACollecterMois = 2400000;
+  final nbreCollecteJour = 35;
+  final nbreCollecteSemaine = 100;
+  final nbreCollecteMois = 400;
   final List<Collecte> collectes = [
     Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
     Collecte(noms: "Ondua Jacqueline", montant: 10000, modePayment: "MTN Mobile Money"),
@@ -77,14 +85,14 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
 
     return [
       charts.Series<LinearSales, int>(
-        id: 'Desktop',
+        id: 'Collecte',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: desktopSalesData,
       ),
       charts.Series<LinearSales, int>(
-        id: 'Tablet',
+        id: 'ResteACollecter',
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
@@ -198,8 +206,8 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                                   controller: tabController,
                                   children: [
                                     _jour(),
-                                    Container(),
-                                    Container(),
+                                    _semaine(),
+                                    _mois(),
                                   ],
                                 ),
                               ),
@@ -229,11 +237,11 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               SizedBox(width: 15,),
-              Text(nbreCollecte.toString(), style: TextStyle(color: Color(0xFFFFC700), fontSize: 25),),
+              Text(nbreCollecteJour.toString(), style: TextStyle(color: Color(0xFFFFC700), fontSize: 25),),
               SizedBox(width: 5,),
               Text("Collectes", style: TextStyle(fontSize: 16, color: textColorGrey),),
               Expanded(child: SizedBox(),),
-              Text(date.toString(), style: TextStyle(fontSize: 16, color: textColorGrey),),
+              Text(dateJour.toString(), style: TextStyle(fontSize: 16, color: textColorGrey),),
               SizedBox(width: 15,),
             ],
           ),
@@ -259,9 +267,9 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                 Row(
                   children: [
                     SizedBox(width: 10,),
-                    _block(Color(0xFF7BB1FF),"Collecté", montantACollecte.toString(), Icons.arrow_circle_down),
+                    _block(Color(0xFF7BB1FF),"Collecté", montantCollecteJour.toString(), Icons.arrow_circle_down),
                     Expanded(child: Container()),
-                    _block(Color(0xFFF86B6D),"Reste à Collecter", resteACollecter.toString(), Icons.arrow_circle_up),
+                    _block(Color(0xFFF86B6D),"Reste à Collecter", resteACollecterJour.toString(), Icons.arrow_circle_up),
                     SizedBox(width: 10,),
                   ],
                 ),
@@ -359,6 +367,288 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
     );
   }
 
+  Widget _semaine() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 20,),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              SizedBox(width: 15,),
+              Text(nbreCollecteSemaine.toString(), style: TextStyle(color: Color(0xFFFFC700), fontSize: 25),),
+              SizedBox(width: 5,),
+              Text("Collectes", style: TextStyle(fontSize: 16, color: textColorGrey),),
+              Expanded(child: SizedBox(),),
+              Text(dateSemaine.toString(), style: TextStyle(fontSize: 16, color: textColorGrey),),
+              SizedBox(width: 15,),
+            ],
+          ),
+          const SizedBox(height: 15,),
+          Container(
+            height: 444,
+            width: MediaQuery.of(context).size.width - 10,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFBEBEBE),
+                    blurRadius: 6,
+                    offset: Offset(0,3),
+                  )
+                ]
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15,),
+                Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    _block(Color(0xFF7BB1FF),"Collecté", montantCollecteSemaine.toString(), Icons.arrow_circle_down),
+                    Expanded(child: Container()),
+                    _block(Color(0xFFF86B6D),"Reste à Collecter", resteACollecterSemaine.toString(), Icons.arrow_circle_up),
+                    SizedBox(width: 10,),
+                  ],
+                ),
+                Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: charts.NumericComboChart(seriesList,
+                          animate: animate,
+                          // Configure the default renderer as a line renderer. This will be used
+                          // for any series that does not define a rendererIdKey.
+                          defaultRenderer: new charts.LineRendererConfig(),
+                          // Custom renderer configuration for the point series.
+                          customSeriesRenderers: [
+                            charts.PointRendererConfig(
+                              // ID used to link series to this renderer.
+                                customRendererId: 'customPoint')
+                          ]),
+                    )
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 30,),
+          const Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text("Taux de collecte par secteur", style: TextStyle(fontSize: 20),),
+          ),
+          const SizedBox(height: 20,),
+          Container(
+            height: 420,
+            width: MediaQuery.of(context).size.width - 10,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFBEBEBE),
+                    blurRadius: 6,
+                    offset: Offset(0,3),
+                  )
+                ]
+            ),
+            child: charts.PieChart<String>(_seriesPieData,
+                animate: animate,
+                animationDuration: Duration(seconds: 1),
+                behaviors: [
+                  charts.DatumLegend(
+                      outsideJustification:
+                      charts.OutsideJustification.endDrawArea,
+                      horizontalFirst: false,
+                      desiredMaxRows: 3,
+                      cellPadding: const EdgeInsets.only(right: 35.0, bottom: 4.0, top: 10.0),
+                      entryTextStyle: const charts.TextStyleSpec(
+                          color: charts.MaterialPalette.black,
+                          fontFamily: 'Georgia',
+                          fontSize: 12
+                      )
+                  )
+                ],
+                // Configure the width of the pie slices to 60px. The remaining space in
+                // the chart will be left as a hole in the center.
+                defaultRenderer: charts.ArcRendererConfig(
+                    arcWidth: 30,
+                    arcRendererDecorators: [
+                      charts.ArcLabelDecorator(
+                          labelPosition: charts.ArcLabelPosition.inside
+                      )
+                    ]
+                )),
+          ),
+          SizedBox(height: 30,),
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              "Collectes récentes",
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ),
+          ),
+          SizedBox(height: 20,),
+          Container(
+            height: 90,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: collectes.length,
+                itemBuilder: (BuildContext context,int index){
+                  return _collecte(collectes[index]);
+                }
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _mois() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 20,),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              SizedBox(width: 15,),
+              Text(nbreCollecteMois.toString(), style: TextStyle(color: Color(0xFFFFC700), fontSize: 25),),
+              SizedBox(width: 5,),
+              Text("Collectes", style: TextStyle(fontSize: 16, color: textColorGrey),),
+              Expanded(child: SizedBox(),),
+              Text(dateMois.toString(), style: TextStyle(fontSize: 16, color: textColorGrey),),
+              SizedBox(width: 15,),
+            ],
+          ),
+          const SizedBox(height: 15,),
+          Container(
+            height: 444,
+            width: MediaQuery.of(context).size.width - 10,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFBEBEBE),
+                    blurRadius: 6,
+                    offset: Offset(0,3),
+                  )
+                ]
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15,),
+                Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    _block(Color(0xFF7BB1FF),"Collecté", montantCollecteMois.toString(), Icons.arrow_circle_down),
+                    Expanded(child: Container()),
+                    _block(Color(0xFFF86B6D),"Reste à Collecter", resteACollecterMois.toString(), Icons.arrow_circle_up),
+                    SizedBox(width: 10,),
+                  ],
+                ),
+                Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: charts.NumericComboChart(seriesList,
+                          animate: animate,
+                          // Configure the default renderer as a line renderer. This will be used
+                          // for any series that does not define a rendererIdKey.
+                          defaultRenderer: new charts.LineRendererConfig(),
+                          // Custom renderer configuration for the point series.
+                          customSeriesRenderers: [
+                            charts.PointRendererConfig(
+                              // ID used to link series to this renderer.
+                                customRendererId: 'customPoint')
+                          ]),
+                    )
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 30,),
+          const Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text("Taux de collecte par secteur", style: TextStyle(fontSize: 20),),
+          ),
+          const SizedBox(height: 20,),
+          Container(
+            height: 420,
+            width: MediaQuery.of(context).size.width - 10,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFBEBEBE),
+                    blurRadius: 6,
+                    offset: Offset(0,3),
+                  )
+                ]
+            ),
+            child: charts.PieChart<String>(_seriesPieData,
+                animate: animate,
+                animationDuration: Duration(seconds: 1),
+                behaviors: [
+                  charts.DatumLegend(
+                      outsideJustification:
+                      charts.OutsideJustification.endDrawArea,
+                      horizontalFirst: false,
+                      desiredMaxRows: 3,
+                      cellPadding: const EdgeInsets.only(right: 35.0, bottom: 4.0, top: 10.0),
+                      entryTextStyle: const charts.TextStyleSpec(
+                          color: charts.MaterialPalette.black,
+                          fontFamily: 'Georgia',
+                          fontSize: 12
+                      )
+                  )
+                ],
+                // Configure the width of the pie slices to 60px. The remaining space in
+                // the chart will be left as a hole in the center.
+                defaultRenderer: charts.ArcRendererConfig(
+                    arcWidth: 30,
+                    arcRendererDecorators: [
+                      charts.ArcLabelDecorator(
+                          labelPosition: charts.ArcLabelPosition.inside
+                      )
+                    ]
+                )),
+          ),
+          SizedBox(height: 30,),
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              "Collectes récentes",
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ),
+          ),
+          SizedBox(height: 20,),
+          Container(
+            height: 90,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: collectes.length,
+                itemBuilder: (BuildContext context,int index){
+                  return _collecte(collectes[index]);
+                }
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _block(Color color, String title, String montant, IconData icon) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -368,9 +658,9 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(color: textColorGreyAccent),),
+            Text(title, style: TextStyle(color: textColorGreyAccent), overflow: TextOverflow.ellipsis,),
             SizedBox(height: 3,),
-            Text("XAF  " + montant, style: TextStyle(color: textColorGrey),),
+            Text("XAF  " + montant, style: TextStyle(color: textColorGrey), overflow: TextOverflow.ellipsis,),
           ],
         )
       ],

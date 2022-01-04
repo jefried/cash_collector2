@@ -26,7 +26,7 @@ class CreationClientState extends State<CreationClient> {
   String nbreDePassage = "1";
   String noms = "";
   String prenoms = "";
-  String secteur = "";
+  String secteur = "Agroalimentaire";
   int telephone = 0;
   String nomsAContacter = "";
   String prenomsAContacter = "";
@@ -279,6 +279,7 @@ class CreationClientState extends State<CreationClient> {
     return Form(
         key: infosBasiqueKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
               keyboardType: TextInputType.text,
@@ -311,8 +312,8 @@ class CreationClientState extends State<CreationClient> {
                 return (value !=null && value.length<1) ? 'veuillez renseigner un prénom' : null;
               },
             ),
-            const SizedBox(height: 20,),
-            TextFormField(
+            const SizedBox(height: 40,),
+            /*TextFormField(
               keyboardType: TextInputType.text,
               initialValue: secteur,
               decoration: const InputDecoration(
@@ -326,6 +327,30 @@ class CreationClientState extends State<CreationClient> {
               validator: (String? value) {
                 return (value !=null && value.length<1) ? 'Veuillez renseigner le secteur d\'activité' : null;
               },
+            ),*/
+            Text("Secteur d'activité"),
+            DropdownButton<String>(
+              value: secteur,
+              isExpanded: true,
+              icon: const Icon(Icons.keyboard_arrow_down, size: 28,),
+              elevation: 16,
+              style: const TextStyle(color: Colors.black, fontSize: 14),
+              underline: Container(
+                height: 1,
+                color: textColorGrey,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  secteur = newValue!;
+                });
+              },
+              items: <String>["Agroalimentaire", "Commerce", "Hébergement", "Santé", "Restauration"]
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 20,),
             TextFormField(

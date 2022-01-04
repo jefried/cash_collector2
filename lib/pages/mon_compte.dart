@@ -128,7 +128,8 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    double appBarSize = 85;
+    double appBarSize = 81;
+    double bannerSize = 150; //205;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(57),
@@ -140,13 +141,13 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height - 72,
+          height: MediaQuery.of(context).size.height - appBarSize,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                    height: 205,
+                    height: bannerSize,
                     width: MediaQuery.of(context).size.width,
                     decoration: const BoxDecoration(
                         //borderRadius: BorderRadius.only(topRight: Radius.circular(29), topLeft: Radius.circular(29)),
@@ -195,7 +196,7 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
                     )
                 ),
                 Container(
-                  height: 660,
+                  height: MediaQuery.of(context).size.height - appBarSize - bannerSize,
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
                       color: Color(0xFFF3F3FF),
@@ -240,65 +241,67 @@ class MonCompteState extends State<MonCompte> with SingleTickerProviderStateMixi
   }
 
   Widget profil() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0xFFBEBEBE),
-                  blurRadius: 6,
-                  offset: Offset(0,3),
-                )
-              ]
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFBEBEBE),
+                    blurRadius: 6,
+                    offset: Offset(0,3),
+                  )
+                ]
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _listTileProfil("Noms", noms, Icons.lock, textColorGrey),
+                const Divider(),
+                _listTileProfil("Prénoms", prenoms, Icons.lock, textColorGrey),
+                const Divider(),
+                _listTileProfil("Sexe", sexe, Icons.lock, textColorGrey),
+                const Divider(),
+                _listTileProfil("CNI", cni, Icons.lock, textColorGrey),
+                const Divider(),
+                _listTileProfil("Numéro de téléphone", telephone,Icons.lock, textColorGrey),
+                const Divider(),
+                _listTileProfil("Langue", langue,Icons.create_sharp, primaryColorAccent),
+              ],
+            ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _listTileProfil("Noms", noms, Icons.lock, textColorGrey),
-              const Divider(),
-              _listTileProfil("Prénoms", prenoms, Icons.lock, textColorGrey),
-              const Divider(),
-              _listTileProfil("Sexe", sexe, Icons.lock, textColorGrey),
-              const Divider(),
-              _listTileProfil("CNI", cni, Icons.lock, textColorGrey),
-              const Divider(),
-              _listTileProfil("Numéro de téléphone", telephone,Icons.lock, textColorGrey),
-              const Divider(),
-              _listTileProfil("Langue", langue,Icons.create_sharp, primaryColorAccent),
-            ],
+          const SizedBox(height: 20,),
+          const Padding(
+            padding: EdgeInsets.only(left: 24),
+            child: Text("Sécurité", style: TextStyle(color: textColorGrey, fontSize: 16),),
           ),
-        ),
-        const SizedBox(height: 20,),
-        const Padding(
-          padding: EdgeInsets.only(left: 24),
-          child: Text("Sécurité", style: TextStyle(color: textColorGrey, fontSize: 16),),
-        ),
-        const SizedBox(height: 20,),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0xFFBEBEBE),
-                  blurRadius: 6,
-                  offset: Offset(0,3),
-                )
-              ]
+          const SizedBox(height: 20,),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFBEBEBE),
+                    blurRadius: 6,
+                    offset: Offset(0,3),
+                  )
+                ]
+            ),
+            child: _listTileProfil("Mot de passe", mdp, Icons.lock, textColorGrey),
           ),
-          child: _listTileProfil("Mot de passe", mdp, Icons.lock, textColorGrey),
-        ),
-        const SizedBox(height: 20,)
-      ],
+          const SizedBox(height: 20,)
+        ],
+      ),
     );
   }
 

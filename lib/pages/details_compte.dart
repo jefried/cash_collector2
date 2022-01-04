@@ -12,6 +12,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:cash_collector/pages/encaissement.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cash_collector/helpers/colors.dart';
 
 
 enum Onglet {
@@ -297,7 +298,7 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
   Widget _info() {
     return SingleChildScrollView(
       child: Container(
-        height: 660,
+        height: MediaQuery.of(context).size.height - 230,//660,
         width: double.infinity,
         decoration: const BoxDecoration(
             color: Color(0xFFF3F3FF),
@@ -344,68 +345,177 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
 
   Widget _infosBasiques() {
     return Container(
+      height: MediaQuery.of(context).size.height - 217,//-217,
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 24),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(9), topRight: Radius.circular(9)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 10,),
-          ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text("Secteur d'activité - " + activite, style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(Icons.phone),
-            title: Text("Téléphone  -  " + telephone, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(CupertinoIcons.location),
-            title: Text(widget.localisation, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(Icons.lock),
-            title: Text("CNI  -  " + cni, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          SizedBox(height: 20,),
-          Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Text("Personne à contacter", style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: infosColor1,
-            )),
-          ),
-          SizedBox(height: 20,),
-          ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text(nomAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(Icons.phone),
-            title: Text("Téléphone  -  " + telephoneAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(CupertinoIcons.location),
-            title: Text(localisationAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10,),
+            ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text("Secteur d'activité - " + activite, style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text("Téléphone  -  " + telephone, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(CupertinoIcons.location),
+              title: Text(widget.localisation, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(Icons.lock),
+              title: Text("CNI  -  " + cni, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            SizedBox(height: 20,),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text("Personne à contacter", style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: infosColor1,
+              )),
+            ),
+            SizedBox(height: 20,),
+            ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text(nomAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070)),),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text("Téléphone  -  " + telephoneAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(CupertinoIcons.location),
+              title: Text(localisationAContacter, style: TextStyle(fontSize: 13, color: Color(0xFF707070))),
+            ),
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+          ],
+        ),
       ),
     );
   }
 
   Widget _photos() {
-    return Container(width: double.infinity, height: 50, color: Colors.white, margin: const EdgeInsets.symmetric(horizontal: 24));
+    return Container(
+        width: double.infinity,
+        color: Colors.transparent,
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          child: Column(
+          children: [
+            Container(
+              height: 176,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("assets/details_compte/photo_indisponible.jpg",),
+                    fit: BoxFit.cover
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0xFFBEBEBE),
+                      blurRadius: 2.0,
+                      offset: Offset(0,3),
+                    )
+                  ]
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: Container(
+                        color: Colors.black.withOpacity(0.6),
+                        child: Text("Photo du lieu", style: TextStyle(color: Colors.white, fontSize: 17),),
+                      )
+                  ),
+                ],
+              )
+            ),
+            const SizedBox(height: 30,),
+            Container(
+              height: 176,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("assets/details_compte/photo_indisponible.jpg"),
+                    fit: BoxFit.cover
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0xFFBEBEBE),
+                      blurRadius: 2.0,
+                      offset: Offset(0,3),
+                    )
+                  ]
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: Container(
+                        color: Colors.black.withOpacity(0.6),
+                        child: Text("Photo CNI (recto)", style: TextStyle(color: Colors.white, fontSize: 17),),
+                      )
+                  ),
+                ],
+              )
+            ),
+            const SizedBox(height: 30,),
+            Container(
+              height: 176,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("assets/details_compte/photo_indisponible.jpg"),
+                    fit: BoxFit.cover
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0xFFBEBEBE),
+                      blurRadius: 2.0,
+                      offset: Offset(0,3),
+                    )
+                  ]
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: Container(
+                        color: Colors.black.withOpacity(0.6),
+                        child: Text("Photo CNI (verso)", style: TextStyle(color: Colors.white, fontSize: 17),),
+                      )
+                  ),
+                ],
+              )
+            ),
+            const SizedBox(height: 30,),
+      ],
+    ),
+        ),
+    );
   }
 
   Widget _historique() {

@@ -44,8 +44,8 @@ class HistoryTransaction extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: textColorGreyAccent,
-            offset: const Offset(3, 3),
-            blurRadius: 9,
+            offset: const Offset(1, 3),
+            blurRadius: 2,
           )
         ]
       ),
@@ -56,12 +56,13 @@ class HistoryTransaction extends StatelessWidget {
             children: [
               Icon(
                 success ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.xmark_circle_fill,
-                size: 45,
+                size: 32,
                 color: success ? successColor : dangerColor,
               ),
               const SizedBox(width: 16,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     transaction,
