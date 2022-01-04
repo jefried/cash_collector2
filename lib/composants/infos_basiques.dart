@@ -29,101 +29,104 @@ class InfosBasiques extends StatelessWidget {
       color: infosColor1
     );
     return Container(
+      height: MediaQuery.of(context).size.height - 217,//-217,
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 24),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(9), topRight: Radius.circular(9)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 10,),
-          ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text(
-              "Secteur d'activité - " + activity,
-              style: styleText,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10,),
+            ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text(
+                "Secteur d'activité - " + activity,
+                style: styleText,
+              ),
             ),
-          ),
-          Divider(
-            color: infosColor1,
-            indent: 15,
-            endIndent: 15,
-          ),
-          ListTile(
-            leading: Icon(Icons.phone),
-            title: Text(
-              "Téléphone  -  " + phoneNumber,
-              style: styleText
+            Divider(
+              color: infosColor1,
+              indent: 15,
+              endIndent: 15,
             ),
-          ),
-          Divider(
-            color: infosColor1,
-            indent: 15, endIndent: 15,
-          ),
-          ListTile(
-            leading: Icon(CupertinoIcons.location),
-            title: Text(
-              localisation,
-              style: styleText
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text(
+                "Téléphone  -  " + phoneNumber,
+                style: styleText
+              ),
             ),
-          ),
-          Divider(
-            color: infosColor1,
-            indent: 15,
-            endIndent: 15,
-          ),
-          ListTile(
-            leading: Icon(Icons.lock),
-            title: Text(
-              "CNI  -  " + cni,
-              style: styleText
+            Divider(
+              color: infosColor1,
+              indent: 15, endIndent: 15,
             ),
-          ),
-          Divider(
-            color: infosColor1,
-            indent: 15,
-            endIndent: 15,
-          ),
-          SizedBox(height: 20,),
-          Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Text(
-              "Personne à contacter",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: infosColor1,
+            ListTile(
+              leading: Icon(CupertinoIcons.location),
+              title: Text(
+                localisation,
+                style: styleText
+              ),
+            ),
+            Divider(
+              color: infosColor1,
+              indent: 15,
+              endIndent: 15,
+            ),
+            ListTile(
+              leading: Icon(Icons.lock),
+              title: Text(
+                "CNI  -  " + cni,
+                style: styleText
+              ),
+            ),
+            Divider(
+              color: infosColor1,
+              indent: 15,
+              endIndent: 15,
+            ),
+            SizedBox(height: 20,),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text(
+                "Personne à contacter",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: infosColor1,
+                )
+              ),
+            ),
+            SizedBox(height: 20,),
+            ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text(
+                nameToContact,
+                style: styleText,
               )
             ),
-          ),
-          SizedBox(height: 20,),
-          ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text(
-              nameToContact,
-              style: styleText,
-            )
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(Icons.phone),
-            title: Text(
-                "Téléphone  -  " + phoneNumberToContact,
-                style: styleText
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text(
+                  "Téléphone  -  " + phoneNumberToContact,
+                  style: styleText
+              ),
             ),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-          ListTile(
-            leading: Icon(CupertinoIcons.location),
-            title: Text(
-                localisationToContact,
-                style: styleText
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+            ListTile(
+              leading: Icon(CupertinoIcons.location),
+              title: Text(
+                  localisationToContact,
+                  style: styleText
+              ),
             ),
-          ),
-          Divider(color: infosColor1, indent: 15, endIndent: 15,),
-        ],
+            Divider(color: infosColor1, indent: 15, endIndent: 15,),
+          ],
+        ),
       ),
     );
   }
