@@ -42,9 +42,9 @@ class MapDisplayer {
     geoCoordinates = geoCoordinateList;
     _hereMapController.pinWidget(
       const Icon(
-        Icons.mode_standby_sharp,
+        Icons.gps_fixed_rounded,
         size: 30,
-        color: namePresentColor,
+        color: routeColor,
       ),
       _currentCoordinate,
     )!;
@@ -66,17 +66,16 @@ class MapDisplayer {
     return _selectedWidgetClient?.clientId;
   }
 
-  setClientAsSelected(int clientId, String imageUrl, String name, clientName){
+  Future<void> setClientAsSelected(int clientId, String imageUrl, String name, clientName) async{
     if (_selectedWidgetClient != null){
       if (_selectedWidgetClient?.clientId == clientId){
-        return null;
+        return;
       }
       replaceCamera();
       WidgetPinClient lastSelectedPinClient = _selectedWidgetClient!;
       lastSelectedPinClient.widgetPin.unpin();
       _mapWidgetMarkerList.remove(lastSelectedPinClient);
       _addMapMarker(lastSelectedPinClient.widgetPin.coordinates, lastSelectedPinClient.clientId);
-      clearMap();
     }
     WidgetPinClient widgetPinClient = _mapWidgetMarkerList.firstWhere(
       (WidgetPinClient element) => element.clientId == clientId
@@ -85,7 +84,7 @@ class MapDisplayer {
     WidgetPin widgetPin = widgetPinClient.widgetPin;
     widgetPin.unpin();
     _mapWidgetMarkerList.remove(widgetPinClient);
-    _addWidgetMapMarkerOnSelected(widgetPinClient.widgetPin.coordinates, clientId, imageUrl, name, clientName);
+    await _addWidgetMapMarkerOnSelected(widgetPinClient.widgetPin.coordinates, clientId, imageUrl, name, clientName);
   }
 
   void _addMapMarker(GeoCoordinates? geoCoordinates, int idClient) {
@@ -112,20 +111,6 @@ class MapDisplayer {
     _hereMapController.mapScene.addMapPolyline(routeMapPolyline);
     _mapPolylines.add(routeMapPolyline);
 
-  }
-
-  String _formatTime(int sec) {
-    int hours = sec ~/ 3600;
-    int minutes = (sec % 3600) ~/ 60;
-
-    return '$hours:$minutes min';
-  }
-
-  String _formatLength(int meters) {
-    int kilometers = meters ~/ 1000;
-    int remainingMeters = meters % 1000;
-
-    return '$kilometers.$remainingMeters km';
   }
 
 
@@ -157,7 +142,7 @@ class MapDisplayer {
       });
   }
 
-  void _addWidgetMapMarkerOnSelected(GeoCoordinates? geoCoordinates, int idClient, String imageUrl, String name, String clientName)  {
+  Future<void> _addWidgetMapMarkerOnSelected(GeoCoordinates? geoCoordinates, int idClient, String imageUrl, String name, String clientName) async {
     WidgetPin widgetPin = _hereMapController.pinWidget(
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -226,7 +211,8 @@ class MapDisplayer {
     )!;
     _selectedWidgetClient = WidgetPinClient(widgetPin, idClient);
     _mapWidgetMarkerList.add(_selectedWidgetClient!);
-    _addRoute(_currentCoordinate, geoCoordinates);
+    clearMap();
+    await _addRoute(_currentCoordinate, geoCoordinates);
   }
 
 }

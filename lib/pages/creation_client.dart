@@ -3,11 +3,16 @@ import 'package:cash_collector/composants/card_photo_pick.dart';
 import 'package:cash_collector/composants/block_button.dart';
 import 'package:cash_collector/composants/block_select.dart';
 import 'package:cash_collector/composants/circular_button.dart';
+import 'package:cash_collector/composants/form_infos_basiques.dart';
 import 'package:cash_collector/pages/encaissement.dart';
 import 'package:cash_collector/pages/home.dart';
 import 'package:cash_collector/pages/mon_compte.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.errors.dart';
+import 'package:here_sdk/search.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,6 +24,9 @@ class CreationClient extends StatefulWidget {
 }
 
 class CreationClientState extends State<CreationClient> {
+
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+
   final snackBar = SnackBar(content: Text("veuillez sélectionner des jours et des heures de visite"));
   bool workStatus = true;
   int activeStep = 0;
@@ -28,6 +36,10 @@ class CreationClientState extends State<CreationClient> {
   String prenoms = "";
   String secteur = "Agroalimentaire";
   int telephone = 0;
+  TextEditingController adressLocationController = TextEditingController();
+  SearchEngine? _searchEngine;
+  GeoCoordinates? currentCoords;
+
   String nomsAContacter = "";
   String prenomsAContacter = "";
   int telephoneAContacter = 0;
@@ -61,6 +73,18 @@ class CreationClientState extends State<CreationClient> {
   GlobalKey<BlockSelectedState> seizeKey = GlobalKey<BlockSelectedState>();
   GlobalKey<BlockSelectedState> dixSeptKey = GlobalKey<BlockSelectedState>();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    try {
+      _searchEngine = SearchEngine();
+    } on InstantiationException {
+      throw Exception("Initialization of SearchEngine failed.");
+    }
+    _setAddressForCoordinates();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,138 +299,138 @@ class CreationClientState extends State<CreationClient> {
     }
   }
 
+  Future<void> _setAddressForCoordinates() async {
+    Position currentPosition = await _geolocatorPlatform.getCurrentPosition();
+    setState(() {
+      currentCoords = GeoCoordinates(currentPosition.latitude, currentPosition.longitude);
+    });
+    int maxItems = 1;
+    SearchOptions reverseGeocodingOptions = SearchOptions(LanguageCode.enGb, maxItems);
+
+    _searchEngine?.searchByCoordinates(
+        currentCoords!, reverseGeocodingOptions,
+      (SearchError? searchError, List<Place>? list) async {
+      if (searchError != null) {
+        // _showDialog("Reverse geocoding", "Error: " + searchError.toString());
+        return;
+      }
+      adressLocationController.text = list!.first.address.addressText;
+    });
+  }
+
   Widget formInfoBasique() {
+
     return Form(
-        key: infosBasiqueKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              keyboardType: TextInputType.text,
-              initialValue: noms,
-              decoration: const InputDecoration(
-                label: Text('Noms', style: TextStyle(fontSize: 14, color: Colors.black),),
-              ),
-              onSaved: (String? value) {
-                if (value!=null) {
-                  noms = value;
-                }
-              },
-              validator: (String? value) {
-                return (value !=null && value.length<1) ? 'veuillez renseigner un nom' : null;
-              },
+      key: infosBasiqueKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.text,
+            initialValue: noms,
+            decoration: const InputDecoration(
+              label: Text('Noms', style: TextStyle(fontSize: 14, color: Colors.black),),
             ),
-            const SizedBox(height: 20,),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              initialValue: prenoms,
-              decoration: const InputDecoration(
-                label: Text('Prénoms', style: TextStyle(fontSize: 14, color: Colors.black),),
-              ),
-              onSaved: (String? value) {
-                if (value!=null) {
-                  prenoms = value;
-                }
-              },
-              validator: (String? value) {
-                return (value !=null && value.length<1) ? 'veuillez renseigner un prénom' : null;
-              },
+            onSaved: (String? value) {
+              if (value!=null) {
+                noms = value;
+              }
+            },
+            validator: (String? value) {
+              return (value !=null && value.length<1) ? 'veuillez renseigner un nom' : null;
+            },
+          ),
+          const SizedBox(height: 20,),
+          TextFormField(
+            keyboardType: TextInputType.text,
+            initialValue: prenoms,
+            decoration: const InputDecoration(
+              label: Text('Prénoms', style: TextStyle(fontSize: 14, color: Colors.black),),
             ),
-            const SizedBox(height: 40,),
-            /*TextFormField(
-              keyboardType: TextInputType.text,
-              initialValue: secteur,
-              decoration: const InputDecoration(
-                label: Text('Secteur d\'activité', style: TextStyle(fontSize: 14, color: Colors.black),),
-              ),
-              onSaved: (String? value) {
-                if (value!=null) {
-                  secteur = value;
-                }
-              },
-              validator: (String? value) {
-                return (value !=null && value.length<1) ? 'Veuillez renseigner le secteur d\'activité' : null;
-              },
-            ),*/
-            Text("Secteur d'activité"),
-            DropdownButton<String>(
-              value: secteur,
-              isExpanded: true,
-              icon: const Icon(Icons.keyboard_arrow_down, size: 28,),
-              elevation: 16,
-              style: const TextStyle(color: Colors.black, fontSize: 14),
-              underline: Container(
-                height: 1,
-                color: textColorGrey,
-              ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  secteur = newValue!;
-                });
-              },
-              items: <String>["Agroalimentaire", "Commerce", "Hébergement", "Santé", "Restauration"]
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            onSaved: (String? value) {
+              if (value!=null) {
+                prenoms = value;
+              }
+            },
+            validator: (String? value) {
+              return (value !=null && value.length<1) ? 'veuillez renseigner un prénom' : null;
+            },
+          ),
+          const SizedBox(height: 40,),
+          /*TextFormField(
+        keyboardType: TextInputType.text,
+        initialValue: secteur,
+        decoration: const InputDecoration(
+          label: Text('Secteur d\'activité', style: TextStyle(fontSize: 14, color: Colors.black),),
+        ),
+        onSaved: (String? value) {
+          if (value!=null) {
+            secteur = value;
+          }
+        },
+        validator: (String? value) {
+          return (value !=null && value.length<1) ? 'Veuillez renseigner le secteur d\'activité' : null;
+        },
+      ),*/
+          Text("Secteur d'activité"),
+          DropdownButton<String>(
+            value: secteur,
+            isExpanded: true,
+            icon: const Icon(Icons.keyboard_arrow_down, size: 28,),
+            elevation: 16,
+            style: const TextStyle(color: Colors.black, fontSize: 14),
+            underline: Container(
+              height: 1,
+              color: textColorGrey,
             ),
-            const SizedBox(height: 20,),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              initialValue: (telephone != 0)?telephone.toString(): "",
-              decoration: const InputDecoration(
-                label: Text('Téléphone', style: TextStyle(fontSize: 14, color: Colors.black),),
-              ),
-              onSaved: (String? value) {
-                if (value!=null) {
-                  telephone = int.parse(value);
-                }
-              },
-              validator: (String? value) {
-                return (value !=null && value.length!=9) ? 'le numéro doit avoir 9 chiffres' : null;
-              },
+            onChanged: (String? newValue) {
+              setState(() {
+                secteur = newValue!;
+              });
+            },
+            items: <String>["Agroalimentaire", "Commerce", "Hébergement", "Santé", "Restauration"]
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 20,),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            initialValue: (telephone != 0)?telephone.toString(): "",
+            decoration: const InputDecoration(
+              label: Text('Téléphone', style: TextStyle(fontSize: 14, color: Colors.black),),
             ),
-            const SizedBox(height: 20,),
-            SizedBox(
-              height: 70,
-              child: Stack(
-                children: [
-                  Positioned(
-                      top: 0,
-                      left: 0,
-                      child: SizedBox(
-                        height: 80,
-                        width: MediaQuery.of(context).size.height - 40,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            label: Text('Localisation', style: TextStyle(fontSize: 14, color: Colors.black),),
-                          ),
-                        ),
-                      )
-                  ),
-                  Positioned(
-                    top: 15,
-                    right: 0,
-                    child: InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> MonCompte()));
-                      },
-                      child: const CircularButton(icon: Icons.my_location, size: 32, sizeIcon: 20, foregroundColor: Colors.black,),
-                    )
-                  )
-                ],
-              ),
-            )
-          ],
-        )
+            onSaved: (String? value) {
+              if (value!=null) {
+                telephone = int.parse(value);
+              }
+            },
+            validator: (String? value) {
+              return (value !=null && value.length!=9) ? 'le numéro doit avoir 9 chiffres' : null;
+            },
+          ),
+          const SizedBox(height: 20,),
+          TextFormField(
+            enabled: false,
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(
+                label: Text(
+                  'Localisation',
+                  style: TextStyle(fontSize: 14, color: Colors.black),
+                )
+            ),
+            controller: adressLocationController,
+          )
+        ],
+      )
     );
   }
 
   Widget formPersonneAContacter() {
+
     return Form(
         key: personneAContacterKey,
         child: Column(

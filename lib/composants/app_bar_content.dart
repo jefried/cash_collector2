@@ -1,9 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:cash_collector/composants/switch_activity_state.dart';
 import 'package:cash_collector/helpers/colors.dart';
+import 'package:cash_collector/provider/app_bar_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cash_collector/pages/notifications.dart' as notif;
+import 'package:provider/provider.dart';
 
 class AppBarContent extends StatefulWidget {
   final Function onPressBtnMenu;
@@ -27,6 +29,8 @@ class _AppBarContentState extends State<AppBarContent> {
 
   @override
   Widget build(BuildContext context) {
+
+    int notifsNumber = Provider.of<AppBarModel>(context).notifsNumber;
     return AppBar(
       elevation: 0,
       titleSpacing: 0,
@@ -61,8 +65,8 @@ class _AppBarContentState extends State<AppBarContent> {
       ),
       actions: [
         const SwitchActivity(),
-        widget.noti?SizedBox():SizedBox(width: 20,),
-        widget.noti?Badge(
+        widget.noti ? SizedBox():  SizedBox(width: 20,),
+        widget.noti ? Badge(
           child: IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const notif.Notification()));
@@ -78,7 +82,7 @@ class _AppBarContentState extends State<AppBarContent> {
               end: 8
           ),
           badgeContent: Text(
-            '1',
+            '$notifsNumber',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 10

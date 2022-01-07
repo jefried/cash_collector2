@@ -10,7 +10,6 @@ import 'package:cash_collector/composants/infos_basiques.dart';
 import 'package:cash_collector/composants/photos_account.dart';
 import 'package:cash_collector/composants/transactions_history.dart';
 import 'package:cash_collector/helpers/colors.dart';
-import 'package:cash_collector/helpers/map_details_account_displayer.dart';
 import 'package:cash_collector/models/history_transaction_item.dart';
 import 'package:cash_collector/style/colors.dart';
 import 'package:flutter/cupertino.dart';
