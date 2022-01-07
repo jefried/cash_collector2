@@ -326,7 +326,7 @@ class DashboardState extends State<Dashboard> with SingleTickerProviderStateMixi
                     entryTextStyle: const charts.TextStyleSpec(
                       color: charts.MaterialPalette.black,
                       fontFamily: 'Georgia',
-                      fontSize: 12
+                      fontSize: 12,
                     )
                   )
                 ],

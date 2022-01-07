@@ -28,6 +28,7 @@ class Encaissement2State extends State<Encaissement2> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(57),
           child: AppBarContent(
+            leading: false,
             title: "Encaissement",
             icon: Icons.arrow_back_ios,
             onPressBtnMenu: (){Navigator.pop(context);},
@@ -36,7 +37,7 @@ class Encaissement2State extends State<Encaissement2> {
         body: Container(
             height: MediaQuery.of(context).size.height - 72,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Color(0xFFF3F3FF),
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(29),
@@ -47,20 +48,20 @@ class Encaissement2State extends State<Encaissement2> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30,),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: Center(
-                      child: Container(height: 120, width: 120, child: Image(image: AssetImage("assets/encaissement/check.png"),)),
+                      child: Container(height: 120, width: 120, child: const Image(image: AssetImage("assets/encaissement/check.png"),)),
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  Text("Encaissement réussi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, ),),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
+                  const Text("Encaissement réussi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, ),),
+                  const SizedBox(height: 20,),
                   Container(
                     height: 357,
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 25),
+                    margin: const EdgeInsets.symmetric(horizontal: 25),
                     child: Stack(
                       children: [
                         Positioned(
@@ -72,7 +73,7 @@ class Encaissement2State extends State<Encaissement2> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     color: Color(0xFFBEBEBE),
                                     blurRadius: 6,
@@ -83,29 +84,29 @@ class Encaissement2State extends State<Encaissement2> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(height: 16),
-                                Text("Détails de la transaction", style: TextStyle(color: textColorGrey, fontSize: 18),),
-                                SizedBox(height: 20,),
+                                const SizedBox(height: 16),
+                                const Text("Détails de la transaction", style: TextStyle(color: textColorGrey, fontSize: 18),),
+                                const SizedBox(height: 20,),
                                 Row(
                                   children: [
                                     Container(
                                       width: (MediaQuery.of(context).size.width - 50)/2,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Text("Montant ", style: TextStyle(color: textColorGreyAccent),),
+                                        children: const [
+                                          Text("Montant ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                           SizedBox(height: 15,),
-                                          Text("Mode ", style: TextStyle(color: textColorGreyAccent),),
+                                          Text("Mode ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                           SizedBox(height: 15,),
-                                          Text("Date ", style: TextStyle(color: textColorGreyAccent),),
+                                          Text("Date ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                           SizedBox(height: 15,),
-                                          Text("ID transaction ", style: TextStyle(color: textColorGreyAccent),),
+                                          Text("ID transaction ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                           SizedBox(height: 15,),
-                                          Text("Bénéficiaire ", style: TextStyle(color: textColorGreyAccent),),
+                                          Text("Bénéficiaire ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                           SizedBox(height: 15,),
-                                          Text("Numéro de téléphone ", style: TextStyle(color: textColorGreyAccent),),
+                                          Text("Numéro de téléphone ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                           SizedBox(height: 15,),
-                                          Text("Agent ", style: TextStyle(color: textColorGreyAccent),),
+                                          Text("Agent ", style: TextStyle(color: textColorGreyAccent, fontSize: 13),),
                                         ],
                                       ),
                                     ),
@@ -113,8 +114,8 @@ class Encaissement2State extends State<Encaissement2> {
                                       width: (MediaQuery.of(context).size.width - 50)/2,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("  "+"10 000"+" CFA", style: TextStyle(fontSize: 13),),
+                                        children: const [
+                                          Text("  "+"10 000"+" FCFA", style: TextStyle(fontSize: 13),),
                                           SizedBox(height: 15,),
                                           Text("  "+"Orange Money", style: TextStyle(fontSize: 13),),
                                           SizedBox(height: 15,),

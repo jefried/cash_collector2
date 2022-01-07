@@ -43,7 +43,7 @@ class PhotosAccount extends StatelessWidget {
                   ],
                 )
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 10,),
             Container(
                 height: 176,
                 width: double.infinity,
@@ -75,7 +75,7 @@ class PhotosAccount extends StatelessWidget {
                   ],
                 )
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 10,),
             Container(
                 height: 176,
                 width: double.infinity,
@@ -107,7 +107,7 @@ class PhotosAccount extends StatelessWidget {
                   ],
                 )
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 20,),
           ],
         ),
       ),

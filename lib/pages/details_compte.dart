@@ -352,7 +352,6 @@ class DetailCompteState extends State<DetailCompte> with SingleTickerProviderSta
                 ),
               ],
             )
-
         ),
       ),
     );

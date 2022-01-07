@@ -9,13 +9,14 @@ class AppBarContent extends StatefulWidget {
   final Function onPressBtnMenu;
   final String title;
   final IconData icon;
-  final bool leading = true;
+  final bool leading;
   final bool noti;
   const AppBarContent({
     Key? key,
     required this.onPressBtnMenu,
     required this.title,
     this.noti = true,
+    this.leading = true,
     this.icon = Icons.menu_rounded
   }) : super(key: key);
 
