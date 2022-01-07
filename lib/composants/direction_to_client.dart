@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:cash_collector/composants/button_transport.dart';
 import 'package:cash_collector/helpers/colors.dart';
-import 'package:cash_collector/helpers/map_details_account_displayer.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:here_sdk/core.dart';
@@ -39,6 +40,7 @@ class _DirectionToClientState extends State<DirectionToClient> {
   Anchor2D _anchor2D = Anchor2D.withHorizontalAndVertical(0.5, 1);
   GeoCoordinates? _currentCoordinates;
   WidgetPin? _ownWidgetLocation;
+  StreamSubscription<Position>? _positionStreamSubscription;
 
   void _onMapCreated(HereMapController hereMapController) {
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) async {
@@ -53,12 +55,37 @@ class _DirectionToClientState extends State<DirectionToClient> {
 
         _addWidgetMapMarkerOwn(_currentCoordinates!);
         _addWidgetMapMarkerClient();
-        _addCarRoute();
-        _addPedestrianRoute();
+        await _addPedestrianRoute(false);
+        await _addCarRoute(true);
+
+        // _listenPosition();
       } else {
         print("Map scene not loaded. MapError: " + error.toString());
       }
     });
+  }
+
+  void _listenPosition(){
+    if (_positionStreamSubscription == null) {
+      final positionStream = _geolocatorPlatform.getPositionStream(distanceFilter: 2);
+      _positionStreamSubscription = positionStream.handleError((error) {
+        _positionStreamSubscription?.cancel();
+        _positionStreamSubscription = null;
+      }).listen(
+        (position)  {
+          // _addWidgetMapMarkerOwn(GeoCoordinates(position.latitude, position.longitude));
+          if (activeTypeRoute == 'car'){
+            _addPedestrianRoute(false);
+            _addCarRoute(false);
+          }
+          else if (activeTypeRoute == 'pedestrian'){
+            _addCarRoute(false);
+            _addPedestrianRoute(false);
+          }
+        }
+      );
+      // _positionStreamSubscription?.pause();
+    }
 
   }
 
@@ -83,6 +110,14 @@ class _DirectionToClientState extends State<DirectionToClient> {
     });
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _positionStreamSubscription?.cancel();
+    // _hereMapController?.finalize();
+  }
+
   void _setPedestrianRouteDetails(here.Route route) {
     int estimatedTravelTimeInSeconds = route.durationInSeconds;
     int lengthInMeters = route.lengthInMeters;
@@ -99,7 +134,7 @@ class _DirectionToClientState extends State<DirectionToClient> {
     if (hours == 0){
       return '${formatter.format(minutes)} min';
     }
-    return '${formatter.format(hours)}:${formatter.format(minutes)} min';
+    return '${formatter.format(hours)}h ${formatter.format(minutes)} min';
   }
 
   String _formatLength(int meters) {
@@ -126,7 +161,7 @@ class _DirectionToClientState extends State<DirectionToClient> {
   }
 
 
-  Future<void> _addCarRoute() async {
+  Future<void> _addCarRoute(bool showRoute) async {
 
     Waypoint startWaypoint = Waypoint.withDefaults(_currentCoordinates!);
     Waypoint destinationWaypoint = Waypoint.withDefaults(widget.clientCoords);
@@ -134,14 +169,16 @@ class _DirectionToClientState extends State<DirectionToClient> {
     List<Waypoint> waypoints = [startWaypoint, destinationWaypoint];
 
     _routingEngine?.calculateCarRoute(waypoints, CarOptions.withDefaults(),
-            (RoutingError? routingError, List<here.Route>? routeList) async {
+        (RoutingError? routingError, List<here.Route>? routeList) async {
           if (routingError == null) {
             // When error is null, then the list guaranteed to be not null.
             here.Route route = routeList!.first;
-            _removeRoute();
+            if (showRoute){
+              _removeRoute();
+              _showRouteOnMap(route, routeColor);
+              _logRouteViolations(route);
+            }
             _setCarRouteDetails(route);
-            _showRouteOnMap(route, routeColor);
-            _logRouteViolations(route);
           } else {
             var error = routingError.toString();
             // _showDialog('Error', 'Error while calculating a route: $error');
@@ -150,7 +187,7 @@ class _DirectionToClientState extends State<DirectionToClient> {
 
   }
 
-  Future<void> _addPedestrianRoute() async {
+  Future<void> _addPedestrianRoute(bool showRoute) async {
 
     Waypoint startWaypoint = Waypoint.withDefaults(_currentCoordinates!);
     Waypoint destinationWaypoint = Waypoint.withDefaults(widget.clientCoords);
@@ -158,19 +195,21 @@ class _DirectionToClientState extends State<DirectionToClient> {
     List<Waypoint> waypoints = [startWaypoint, destinationWaypoint];
 
     _routingEngine?.calculatePedestrianRoute(waypoints, PedestrianOptions.withDefaults(),
-            (RoutingError? routingError, List<here.Route>? routeList) async {
-          if (routingError == null) {
-            // When error is null, then the list guaranteed to be not null.
-            here.Route route = routeList!.first;
-            _removeRoute();
-            _setPedestrianRouteDetails(route);
-            _showRouteOnMap(route, routeColor);
-            _logRouteViolations(route);
-          } else {
-            var error = routingError.toString();
-            // _showDialog('Error', 'Error while calculating a route: $error');
-          }
-        });
+        (RoutingError? routingError, List<here.Route>? routeList) async {
+      if (routingError == null) {
+        // When error is null, then the list guaranteed to be not null.
+        here.Route route = routeList!.first;
+        if (showRoute){
+          _removeRoute();
+          _showRouteOnMap(route, routeColor);
+          _logRouteViolations(route);
+        }
+        _setPedestrianRouteDetails(route);
+      } else {
+        var error = routingError.toString();
+        // _showDialog('Error', 'Error while calculating a route: $error');
+      }
+    });
 
   }
 
@@ -294,7 +333,7 @@ class _DirectionToClientState extends State<DirectionToClient> {
                           icon: Icons.directions_car,
                           onClicked: (){
                             if (activeTypeRoute != 'car'){
-                              _addCarRoute();
+                              _addCarRoute(true);
                               setState(() {
                                 activeTypeRoute = 'car';
                               });
@@ -311,7 +350,7 @@ class _DirectionToClientState extends State<DirectionToClient> {
                           mode: "à pied",
                           onClicked: (){
                             if (activeTypeRoute != 'pedestrian'){
-                              _addPedestrianRoute();
+                              _addPedestrianRoute(true);
                               setState(() {
                                 activeTypeRoute = 'pedestrian';
                               });

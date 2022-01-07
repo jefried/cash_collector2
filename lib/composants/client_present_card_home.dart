@@ -63,6 +63,7 @@ class ClientPresentCardHome extends StatelessWidget {
                 style: const TextStyle(
                     fontFamily: 'Poppins Medium',
                     fontSize: 13,
+                    overflow: TextOverflow.ellipsis,
                     color: namePresentColor
                 ),
               ),

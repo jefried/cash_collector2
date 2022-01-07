@@ -1,8 +1,10 @@
 import 'package:cash_collector/pages/client_list.dart';
 import 'package:cash_collector/pages/connexion.dart';
 import 'package:cash_collector/pages/home.dart';
+import 'package:cash_collector/provider/app_bar_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:here_sdk/core.dart';
 
 //for pre-loading images
@@ -49,7 +51,12 @@ void main() {
         //set brightness for icons, like dark background light icons
       )
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppBarModel(),
+      child: const MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {

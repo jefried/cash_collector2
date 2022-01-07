@@ -1,7 +1,9 @@
 import 'package:cash_collector/composants/time_counter.dart';
 import 'package:cash_collector/helpers/colors.dart';
+import 'package:cash_collector/provider/app_bar_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:provider/provider.dart';
 
 class SwitchActivity extends StatefulWidget {
   const SwitchActivity({Key? key}) : super(key: key);
@@ -12,11 +14,18 @@ class SwitchActivity extends StatefulWidget {
 
 class _SwitchActivityStateState extends State<SwitchActivity> {
 
-  bool isToggleOn = false;
-  GlobalKey<TimeCounterState> timerKey = GlobalKey();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    AppBarModel appBarModel = Provider.of<AppBarModel>(context);
+    bool isToggleOn = appBarModel.startedActivity;
+
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Column(
@@ -31,10 +40,7 @@ class _SwitchActivityStateState extends State<SwitchActivity> {
               value: isToggleOn,
               onToggle: (value) {
                   if (value){
-                    timerKey.currentState?.initTimer();
-                    setState(() {
-                      isToggleOn = value;
-                    });
+                    appBarModel.setStartedActivity(value);
                   }
                   else{
                     showDialog(
@@ -125,10 +131,7 @@ class _SwitchActivityStateState extends State<SwitchActivity> {
                                     borderRadius: BorderRadius.circular(24)
                                 ),
                                 onPressed: () {
-                                  timerKey.currentState?.stopTimer();
-                                  setState(() {
-                                    isToggleOn = value;
-                                  });
+                                  appBarModel.stopTimer();
                                   Navigator.of(context, rootNavigator: true).pop();
                                 },
                                 child: Center(
@@ -159,9 +162,7 @@ class _SwitchActivityStateState extends State<SwitchActivity> {
               activeColor: const Color(0xFF0EAE18),
             ),
           ),
-          TimeCounter(
-            key: timerKey,
-          )
+          TimeCounter()
         ],
       ),
     );
